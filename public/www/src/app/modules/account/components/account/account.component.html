@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-md-12">
+    <h4>Accounts</h4>
+
+    <div class="row item" *ngFor="let i of list">
+      <div class="col">{{i.updatedOn | date:'dd MMM'}}</div>
+      <div class="col">{{i.type}}</div>
+      <div class="col">{{i.note}}</div>
+      <div class="col red">{{i.value}} лв.</div>
+      <div class="col"><span (click)="editAccount(i)" class="" ><i class="fa fa-edit"></i></span></div>
+      <div class="col"><span (click)="deleteAccount(i.guid)" class="" ><i class="fa fa-remove red"></i></span></div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"><h4 class="red">{{total}} лв.</h4></div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f>
+      <div class="form-group row">
+        <label for="" class="col-md-12">Category</label>
+        <select [(ngModel)]="account.type" name="type" class="form-control col-md-12" required>
+          <option *ngFor='let k of types' [value]="k">{{k}}</option>
+        </select>
+
+      </div>
+
+      <div class="form-group row">
+        <label for="" class="col-md-12">Note</label>
+        <textarea type="text" class="form-control form-control-lg" [(ngModel)]="account.note" name="note"></textarea>
+      </div>
+      <div class="form-group row">
+        <label for="" class="col-md-8">Value</label>
+        <input type="number" class="form-control form-control-lg col-md-4" name="value" [(ngModel)]="account.value" required />
+
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="f.className.indexOf('ng-invalid')>-1" >Ok</button>
+
+    </form>
+
+  </div>
+</div>
