@@ -34,3 +34,5 @@ router.post('/expense', function(req, res, next){
     }
     
 })
+
+module.exports = router;
