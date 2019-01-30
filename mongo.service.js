@@ -359,6 +359,15 @@ module.exports = {
         })
     },
 
+    getExpenseCategories: function() {
+        return new Promise(function(resolve, reject){
+            db.categories.find({},(error, data) => {
+                if(error) reject(error);
+                else resolve(data);
+            })
+        });
+    },
+
     updateAccount: function (item) {
 
     },

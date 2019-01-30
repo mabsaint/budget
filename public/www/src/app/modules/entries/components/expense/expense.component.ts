@@ -15,24 +15,25 @@ export class ExpenseComponent implements OnInit {
   model = new Entry();
   list = new Array();
   submitted = false;
-  categories = config.categories.sort((a,b) => {return a.title >b.title ? 0 : -1});
+  categories: any;
   periods = config.periods;
 
-  private _from:Date = new Date()
-  private _to:Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
-  private JSON:any;
+  private _from: Date = new Date()
+  private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
+  private JSON: any;
 
-  get total() : number {
-    var ans = 0;
+  get total(): number {
+    let ans = 0;
     this.list.forEach(element => {
-      ans += element.total
+      ans += element.total;
     });
     return ans;
   }
 
-  get subcategories() : string[] {
-    var currentcat:{title:string,subcategories:string[]} = this.categories.find((a)=>{return a.title == this.model.category});
-    return currentcat ? currentcat.subcategories : ['a','b'];
+  get subcategories(): string[] {
+    var currentcat: {title: string, subcategories: string[]} = this.categories ? this.categories.find((a)=>{return a.title == this.model.category}) : {};
+
+    return currentcat ? currentcat.subcategories : ['a', 'b'];
   }
 
   constructor( private entryService: EntryService) {
@@ -47,7 +48,7 @@ export class ExpenseComponent implements OnInit {
       this.getEntries();
     });
     console.log(this.model);
-    
+
   }
 
   deleteEntry( id ) {
@@ -71,9 +72,15 @@ export class ExpenseComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.entryService.getCategories()
+      .subscribe((data: any[]) => {
+        this.categories  = data.sort((a, b) =>  a.title > b.title ? 0 : -1 );
+      });
+
    this.getEntries();
    this.model = new Entry();
-  
+
   }
 
 

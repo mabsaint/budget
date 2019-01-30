@@ -152,6 +152,17 @@ app.route('/accounts')
         })
     })
 
+app.route('/categories')
+    .get(function(req, res){
+        mongoservice.getExpenseCategories()
+        .then(function(data){
+            res.send(data)
+        })
+    })
+    .post(function(req, res){
+
+    })
+
 app.use(function (req, res, next) {
     var err = new Error('Not found!');
     err.status = 404;

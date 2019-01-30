@@ -19,7 +19,7 @@ export class EntryService {
 
   private url: string;
   constructor( private http: HttpClient ) {
-    this.url = "http://mybudget.website:3000/";
+    this.url = "http://localhost:3000/";
    }
 
   insertEntry( entry: Entry ): Observable<Entry> {
@@ -52,6 +52,10 @@ export class EntryService {
 
   getAccounts(): Observable<BankAccount[]> {
     return this.http.get<BankAccount[]>(this.url + 'accounts');
+  }
+
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'categories');
   }
 
 }
