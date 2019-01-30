@@ -17,8 +17,10 @@ app.engine('html', require('ejs').renderFile);
 
 // Setup CORS:
 const cors = require('cors');
+const whitelist = ['http://mybudget.website', 'http://localhost:4200'];
+
 var corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: whitelist,
     optionsSuccessStatus: 200
 }
 
