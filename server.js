@@ -17,8 +17,10 @@ app.engine('html', require('ejs').renderFile);
 
 // Setup CORS:
 const cors = require('cors');
+const whitelist = ['http://mybudget.website', 'http://localhost:4200'];
+
 var corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: whitelist,
     optionsSuccessStatus: 200
 }
 
@@ -148,6 +150,17 @@ app.route('/accounts')
         .then(function(data){
             res.send(data);
         })
+    })
+
+app.route('/categories')
+    .get(function(req, res){
+        mongoservice.getExpenseCategories()
+        .then(function(data){
+            res.send(data)
+        })
+    })
+    .post(function(req, res){
+
     })
 
 app.use(function (req, res, next) {

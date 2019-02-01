@@ -12,7 +12,11 @@ const CALENDAR_FILTER = {
     },
     type: 'expense'
 };
-var db = mongojs("mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev", [collectionName]);
+
+// const MONGO_CONNECTION = 'mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev'
+const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
+
+var db = mongojs(MONGO_CONNECTION, [collectionName]);
 
 
 
@@ -89,7 +93,7 @@ module.exports = {
                         }
                     }
 
-                    mongodb.connect("mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev", function (err, client) {
+                    mongodb.connect(MONGO_CONNECTION, function (err, client) {
                         assert.equal(null, err);
                         console.log("Connected successfully.");
                         //var db = db.db('mongo_dpdev');
@@ -353,6 +357,15 @@ module.exports = {
             }
            
         })
+    },
+
+    getExpenseCategories: function() {
+        return new Promise(function(resolve, reject){
+            db.categories.find({},(error, data) => {
+                if(error) reject(error);
+                else resolve(data);
+            })
+        });
     },
 
     updateAccount: function (item) {

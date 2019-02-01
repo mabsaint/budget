@@ -54,4 +54,8 @@ export class EntryService {
     return this.http.get<BankAccount[]>(this.url + 'accounts');
   }
 
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'categories');
+  }
+
 }

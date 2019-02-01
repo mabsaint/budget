@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Entry } from "../../models/entry";
+import { NgForm, FormControl } from '@angular/forms';
+import { Entry, ICategory } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './expense.config';
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-expense',
@@ -15,31 +16,68 @@ export class ExpenseComponent implements OnInit {
   model = new Entry();
   list = new Array();
   submitted = false;
-  categories = config.categories.sort((a,b) => {return a.title >b.title ? 0 : -1});
+  categories: ICategory[] = [];
+  filteredCategories: Observable<ICategory[]>;
   periods = config.periods;
 
-  private _from:Date = new Date()
-  private _to:Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
-  private JSON:any;
+  json = JSON;
 
-  get total() : number {
-    var ans = 0;
+  catControl: FormControl = new FormControl();
+
+  private _from: Date = new Date();
+  private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1);
+  private JSON: any;
+
+  get total(): number {
+    let ans = 0;
     this.list.forEach(element => {
-      ans += element.total
+      ans += element.total;
     });
     return ans;
   }
 
-  get subcategories() : string[] {
-    var currentcat:{title:string,subcategories:string[]} = this.categories.find((a)=>{return a.title == this.model.category});
-    return currentcat ? currentcat.subcategories : ['a','b'];
+  get subcategories(): ICategory[] {
+    // tslint:disable-next-line:max-line-length
+    const currentcat: ICategory = this.categories ? this.categories.find((a) => a.title === this.model.category) : null;
+
+    return currentcat ? currentcat.subcategories : [];
   }
 
   constructor( private entryService: EntryService) {
     this.JSON = JSON;
    }
 
-  onSubmit(){
+   ngOnInit() {
+
+    this.entryService.getCategories()
+      .subscribe((data: any[]) => {
+        this.categories  = data.sort((a, b) =>  a.title > b.title ? 0 : -1 );
+      });
+
+    this.catControl.valueChanges.subscribe( v => {
+      console.log(v);
+      this.model.category = v;
+    });
+
+    this.filteredCategories = this.catControl.valueChanges
+    .pipe(
+      startWith(''),
+      map( v => this._filter(v))
+    );
+
+   this.getEntries();
+   this.model = new Entry();
+
+  }
+
+  _filter(v): ICategory[] {
+    const filterValue = v.toLowerCase();
+
+    return this.categories.filter(option => option.title.toLowerCase().includes(filterValue));
+
+  }
+
+  onSubmit() {
     this.submitted = true;
     // Put changes ....
     this.entryService.insertEntry(this.model).subscribe((data: Entry) => {
@@ -47,7 +85,7 @@ export class ExpenseComponent implements OnInit {
       this.getEntries();
     });
     console.log(this.model);
-    
+
   }
 
   deleteEntry( id ) {
@@ -69,13 +107,6 @@ export class ExpenseComponent implements OnInit {
       });
     });
   }
-
-  ngOnInit() {
-   this.getEntries();
-   this.model = new Entry();
-  
-  }
-
 
   setInterval(data: Date[]) {
    this._from = data[0];

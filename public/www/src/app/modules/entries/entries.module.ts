@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ExpenseComponent } from './components/expense/expense.component';
 import { IncomeComponent } from './components/income/income.component';
 import { FilterDateComponent } from './components/filter-date.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule, MatFormFieldModule } from '@angular/material';
+import { MatNativeDateModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
 
 
 
@@ -16,7 +16,9 @@ import { MatNativeDateModule, MatFormFieldModule } from '@angular/material';
     FormsModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
   exports: [ExpenseComponent, IncomeComponent]
 })
