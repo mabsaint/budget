@@ -17,12 +17,14 @@ export class ExpenseComponent implements OnInit {
   list = new Array();
   submitted = false;
   categories: ICategory[] = [];
+  // subcategories: ICategory[] = [];
   filteredCategories: Observable<ICategory[]>;
   periods = config.periods;
 
   json = JSON;
 
   catControl: FormControl = new FormControl();
+  subcatControl: FormControl = new FormControl();
 
   private _from: Date = new Date();
   private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1);
@@ -65,9 +67,22 @@ export class ExpenseComponent implements OnInit {
       map( v => this._filter(v))
     );
 
+    this.subcatControl.valueChanges.subscribe( v => {
+      console.log(v);
+      this.model.subcategory = v;
+    });
+
    this.getEntries();
    this.model = new Entry();
 
+  }
+
+  onFocus ( e ) {
+    this.filteredCategories = this.catControl.valueChanges
+    .pipe(
+      startWith(''),
+      map( v => this._filter(v))
+    );
   }
 
   _filter(v): ICategory[] {
