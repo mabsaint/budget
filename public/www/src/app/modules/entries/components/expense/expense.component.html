@@ -35,21 +35,42 @@
         name="category"
         class="form-control col-md-12"
         [matAutocomplete]='auto'
+<<<<<<< HEAD
         (focus) = 'onCategoryFocus()'
         >
+=======
+        (focus) ='onFocus($event)'>
+>>>>>>> d91ca0c37ba0a69e4e74d3b124dbe1cad68e4348
 
         <mat-autocomplete #auto='matAutocomplete'>
           <mat-option *ngFor="let category of filteredCategories | async" [value] = 'category.title'>
             {{category.title}}
           </mat-option>
         </mat-autocomplete>
+<<<<<<< HEAD
 
+=======
+        {{json.stringify(model)}}
+>>>>>>> d91ca0c37ba0a69e4e74d3b124dbe1cad68e4348
       </div>
       <div class="form-group row">
         <label for="" class="col-md-12">SubCategory</label>
-        <select [(ngModel)]="model.subcategory" name="subcategory" class="form-control col-md-12" >
+        <!-- <select [(ngModel)]="model.subcategory" name="subcategory" class="form-control col-md-12" >
           <option *ngFor='let k1 of subcategories' [value]="k1">{{k1}}</option>
-        </select>
+        </select> -->
+        <input type="text"
+        matInput
+        [formControl] = "subcatControl"
+        name="subcategory"
+        class="form-control col-md-12"
+        [matAutocomplete]='subauto'
+        (focus) ='onFocus($event)'>
+
+        <mat-autocomplete #subauto='matAutocomplete'>
+          <mat-option *ngFor="let subcategory of subcategories" [value] = 'subcategory.title'>
+            {{subcategory.title}}
+          </mat-option>
+        </mat-autocomplete>
       </div>
       <div class="form-group row">
         <label for="" class="col-md-12">Note</label>

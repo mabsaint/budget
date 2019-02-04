@@ -31,6 +31,16 @@ module.exports = {
         } else {
             item.guid = uuid();
             return new Promise(function (resolve, reject) {
+                // create a new category:
+                db.categories.find({'title':item.category}, function( err, result) {
+                   if(!result.length == 0) {
+                    console.log("New category ...");
+                    db.categories.insertMany([item.category]);
+                   }
+                });
+                
+                console.log(item);
+
                 if (item.period && item.date && item.enddate) {
                     var toInsert = [];
                     if (item.period == 'daily') { // Daily:
@@ -108,6 +118,9 @@ module.exports = {
                         })
                     });
                 } else {
+
+
+
                     item.date = new Date(item.date)
                     db.entries.save(item, function (err, result) {
                         if (err) {
