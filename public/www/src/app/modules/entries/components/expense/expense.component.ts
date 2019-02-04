@@ -59,6 +59,7 @@ export class ExpenseComponent implements OnInit {
       this.model.category = v;
     });
 
+
     this.filteredCategories = this.catControl.valueChanges
     .pipe(
       startWith(''),
@@ -85,6 +86,15 @@ export class ExpenseComponent implements OnInit {
       this.getEntries();
     });
     console.log(this.model);
+
+  }
+
+  onCategoryFocus() {
+   this.filteredCategories = this.catControl.valueChanges
+   .pipe(
+     startWith(''),
+     map( v => this._filter(v))
+   );
 
   }
 

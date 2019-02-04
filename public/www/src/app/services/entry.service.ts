@@ -27,13 +27,14 @@ export class EntryService {
     return this.http.post<Entry>( this.url + entry.type, entry, httpOptions );
   }
 
-  getEntries(from:Date = null,to:Date=null): Observable<Array<Entry>> {
-    console.log(from.toISOString().substr(0,10));
+  getEntries(from:Date = null, to: Date = null): Observable<Array<Entry>> {
+    console.log(from.toISOString().substr(0, 10));
+    // tslint:disable-next-line:max-line-length
     return this.http.get<Array<Entry>>(this.url + 'expense/grouped/' + from.toISOString().substr(0,10) + '/' + to.toISOString().substr(0,10));
   }
 
-  getIncomeEntries(from:Date = null,to:Date=null): Observable<Array<Entry>> {
-    console.log(from.toISOString().substr(0,10));
+  getIncomeEntries(from: Date = null, to: Date = null): Observable<Array<Entry>> {
+    console.log(from.toISOString().substr(0, 10));
     return this.http.get<Array<Entry>>(this.url + 'income/grouped/' + from.toISOString().substr(0,10) + '/' + to.toISOString().substr(0,10));
   }
 
