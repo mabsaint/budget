@@ -1,19 +1,21 @@
 <div class="row">
   <div class="col-md-12 col-sm-12">
     <h4>Expenses</h4>
-    <filter-date (changed) = 'setInterval($event)'></filter-date>
-    <div class="row" *ngFor="let i of list" >
-      <div class="col-xs-3" >{{i.date | date:'dd MMM, yyy'}}</div>
+    <filter-date (changed)='setInterval($event)'></filter-date>
+    <div class="row" *ngFor="let i of list">
+      <div class="col-xs-3">{{i.date | date:'dd MMM, yyy'}}</div>
       <div class="col-xs-4">{{i.category}}</div>
       <div class="col-xs-9">{{i.total}} лв.</div>
-      <div class="col-xs-1"><span (click)="editEntry(i)" class="btn" ><i class="fa fa-edit"></i></span></div>
-      <div class="col-xs-1"><span (click)="deleteEntry(i.guid)" class="btn" ><i class="fa fa-remove red"></i></span></div>
+      <div class="col-xs-1"><span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span></div>
+      <div class="col-xs-1"><span (click)="deleteEntry(i.guid)" class="btn"><i class="fa fa-remove red"></i></span></div>
     </div>
     <hr />
     <div class="row">
       <div class="col"></div>
       <div class="col"></div>
-      <div class="col"><h4 class="red">{{total}} лв.</h4></div>
+      <div class="col">
+        <h4 class="red">{{total}} лв.</h4>
+      </div>
       <div class="col"></div>
       <div class="col"></div>
 
@@ -21,7 +23,7 @@
 
   </div>
   <div class="col-md-12">
-      {{json.stringify(model)}}
+    {{json.stringify(categories)}}
     <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f>
       <div class="form-group row">
         <label for="" class="col-md-12">Category</label>
@@ -29,45 +31,26 @@
         <!-- <select [(ngModel)]="model.category" name="category" class="form-control col-md-12" required>
           <option *ngFor='let k of categories' [value]="k.title">{{k.title}}</option>
         </select> -->
-        <input type="text"
-        matInput
-        [formControl] = "catControl"
-        name="category"
-        class="form-control col-md-12"
-        [matAutocomplete]='auto'
-<<<<<<< HEAD
-        (focus) = 'onCategoryFocus()'
-        >
-=======
-        (focus) ='onFocus($event)'>
->>>>>>> d91ca0c37ba0a69e4e74d3b124dbe1cad68e4348
+        <input type="text" matInput [formControl]="catControl" name="category" class="form-control col-md-12"
+          [matAutocomplete]='auto' (focus)='onFocus($event)'>
 
         <mat-autocomplete #auto='matAutocomplete'>
-          <mat-option *ngFor="let category of filteredCategories | async" [value] = 'category.title'>
+          <mat-option *ngFor="let category of filteredCategories | async" [value]='category.title'>
             {{category.title}}
           </mat-option>
         </mat-autocomplete>
-<<<<<<< HEAD
-
-=======
         {{json.stringify(model)}}
->>>>>>> d91ca0c37ba0a69e4e74d3b124dbe1cad68e4348
       </div>
       <div class="form-group row">
         <label for="" class="col-md-12">SubCategory</label>
         <!-- <select [(ngModel)]="model.subcategory" name="subcategory" class="form-control col-md-12" >
           <option *ngFor='let k1 of subcategories' [value]="k1">{{k1}}</option>
         </select> -->
-        <input type="text"
-        matInput
-        [formControl] = "subcatControl"
-        name="subcategory"
-        class="form-control col-md-12"
-        [matAutocomplete]='subauto'
-        (focus) ='onFocus($event)'>
+        <input type="text" matInput [formControl]="subcatControl" name="subcategory" class="form-control col-md-12"
+          [matAutocomplete]='subauto' (focus)='onSubFocus($event)'>
 
         <mat-autocomplete #subauto='matAutocomplete'>
-          <mat-option *ngFor="let subcategory of subcategories" [value] = 'subcategory.title'>
+          <mat-option *ngFor="let subcategory of subcategories" [value]='subcategory.title'>
             {{subcategory.title}}
           </mat-option>
         </mat-autocomplete>
@@ -78,13 +61,15 @@
       </div>
       <div class="form-group row">
         <label for="" class="col-md-9">Value</label>
-        <input type="number" class="form-control form-control-lg col-md-3" name="value" [(ngModel)]="model.value" required />
+        <input type="number" class="form-control form-control-lg col-md-3" name="value" [(ngModel)]="model.value"
+          required />
       </div>
       <div class="form-group ">
-          <label for="" class="col-md-12">Date</label>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" name="date" required>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+        <label for="" class="col-md-12">Date</label>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" name="date"
+          required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
 
       </div>
       <section name="">
@@ -95,14 +80,15 @@
           </select>
         </div>
         <div class="form-group ">
-            <label for="" class="col-md-12" [hidden]='!model.period'>End Date</label>
-            <input matInput [matDatepicker]="endpicker" placeholder="Choose a date" [(ngModel)]="model.enddate" name="enddate" [hidden]='!model.period' >
-            <mat-datepicker-toggle matSuffix [for]="endpicker" [hidden]='!model.period'></mat-datepicker-toggle>
-            <mat-datepicker #endpicker [hidden]='!model.period'></mat-datepicker>
+          <label for="" class="col-md-12" [hidden]='!model.period'>End Date</label>
+          <input matInput [matDatepicker]="endpicker" placeholder="Choose a date" [(ngModel)]="model.enddate" name="enddate"
+            [hidden]='!model.period'>
+          <mat-datepicker-toggle matSuffix [for]="endpicker" [hidden]='!model.period'></mat-datepicker-toggle>
+          <mat-datepicker #endpicker [hidden]='!model.period'></mat-datepicker>
 
         </div>
       </section>
-      <button type="submit" class="btn btn-primary" [disabled]="f.className.indexOf('ng-invalid')>-1" >Add</button>
+      <button type="submit" class="btn btn-primary" [disabled]="f.className.indexOf('ng-invalid')>-1">Add</button>
 
     </form>
 

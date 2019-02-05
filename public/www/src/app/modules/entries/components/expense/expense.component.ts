@@ -19,6 +19,7 @@ export class ExpenseComponent implements OnInit {
   categories: ICategory[] = [];
   // subcategories: ICategory[] = [];
   filteredCategories: Observable<ICategory[]>;
+  filteredSubCategories: Observable<ICategory[]>;
   periods = config.periods;
 
   json = JSON;
@@ -86,6 +87,17 @@ export class ExpenseComponent implements OnInit {
     );
   }
 
+  onSubFocus ( e ) {
+    /*
+    this.filteredSubCategories = this.catControl.valueChanges
+    .pipe(
+      startWith(''),
+      map( v => this._filter(v))
+    );
+    */
+   console.log( this.model.category );
+  }
+
   _filter(v): ICategory[] {
     const filterValue = v.toLowerCase();
 
@@ -98,6 +110,8 @@ export class ExpenseComponent implements OnInit {
     // Put changes ....
     this.entryService.insertEntry(this.model).subscribe((data: Entry) => {
       this.model = new Entry();
+      this.catControl = new FormControl();
+      this.subcatControl = new FormControl();
       this.getEntries();
     });
     console.log(this.model);

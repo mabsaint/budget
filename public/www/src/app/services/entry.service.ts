@@ -38,7 +38,7 @@ export class EntryService {
     return this.http.get<Array<Entry>>(this.url + 'income/grouped/' + from.toISOString().substr(0,10) + '/' + to.toISOString().substr(0,10));
   }
 
-  getAllEntries(fromnow:boolean=false): Observable<Array<Entry>> {
+  getAllEntries(fromnow: boolean = false): Observable<Array<Entry>> {
     return fromnow ? this.http.get<Array<Entry>>(this.url + 'all/'+(new Date().toISOString().substr(0,10))) : this.http.get<Array<Entry>>(this.url + 'all/');
   }
 

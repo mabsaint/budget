@@ -113,12 +113,12 @@ export class CalendarComponent implements OnInit {
 
   getTotalTillCurrent(current: Entry, list: Entry[]) {
     let value = this.available;
-    
+    console.log(value);
     let hasBase = list.find((e) => {
       return (e.date == current.date) && e.base;
     });
     let lastBase = list.sort( (a,b) => { return a.date >= b.date ? -1 : 1}).filter(e=>e.base && e.date <= current.date)
-    console.log(lastBase[0]);
+    //console.log(lastBase[0]);
 
     list.sort((a, b) => { return a.date >= b.date ? 1 : -1 });
     if(lastBase[0]) {
@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit {
 */
     // console.log(current.date + ":" + hasBase)
     // console.log(list);
-    
+
      for (let i = 0; i < list.length; i++) {
       // console.log(current.date + ":" + list[i].value);
       value += list[i].value;
@@ -164,7 +164,7 @@ export class CalendarComponent implements OnInit {
             beforeStart: true,
             afterEnd: true
           },
-          id:element._id
+          id: element._id
         },
 
         );
@@ -177,11 +177,11 @@ export class CalendarComponent implements OnInit {
   loadAccounts() {
     this.entryService.getAccounts().subscribe((data) => {
       this.accounts = data;
+      this.loadEvents();
     })
   }
 
   ngOnInit() {
-    this.loadEvents();
     this.loadAccounts();
   }
 
