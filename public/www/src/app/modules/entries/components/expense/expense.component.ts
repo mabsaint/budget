@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormControl } from '@angular/forms';
+import { NgForm, FormControl, FormGroup } from '@angular/forms';
 import { Entry, ICategory } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './expense.config';
@@ -23,6 +23,10 @@ export class ExpenseComponent implements OnInit {
   periods = config.periods;
 
   json = JSON;
+
+  myGroup = new FormGroup({
+    catControl: new FormControl()
+  });
 
   catControl: FormControl = new FormControl();
   subcatControl: FormControl = new FormControl();
@@ -85,6 +89,8 @@ export class ExpenseComponent implements OnInit {
       startWith(''),
       map( v => this._filter(v))
     );
+
+    console.log( this.filteredCategories);
   }
 
   onSubFocus ( e ) {
@@ -101,7 +107,7 @@ export class ExpenseComponent implements OnInit {
   _filter(v): ICategory[] {
     const filterValue = v.toLowerCase();
 
-    return this.categories.filter(option => option.title.toLowerCase().includes(filterValue));
+    return this.categories.filter(option => option.title ? option.title.toLowerCase().includes(filterValue) : '');
 
   }
 
