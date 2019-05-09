@@ -3,20 +3,18 @@
   <div class="col-md-12">
     <h4>Incomes</h4>
     <filter-date (changed) = 'setInterval($event)'></filter-date>
-    <div class="row" *ngFor="let i of list">
-      <div class="col">{{i.date | date:'dd MMM'}}</div>
-      <div class="col">{{i.category}}</div>
-      <div class="col red">{{i.total}} лв.</div>
-      <div class="col"><span (click)="editEntry(i)" class="btn" ><i class="fa fa-edit"></i></span></div>
-      <div class="col"><span (click)="deleteEntry(i.guid)" class="btn" ><i class="fa fa-remove red"></i></span></div>
+    <div class="row list-row" *ngFor="let i of list">
+      <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>
+      <div class="col-md-2 col-3">{{i.category}}</div>
+      <div class="col-md-2 col-3">{{i.note}}</div>
+      <div class="col-md-2 col-3">{{i.value}} лв.</div>
+      <div class="col-md-1 col-1"><span (click)="editEntry(i)" class="btn" ><i class="fa fa-edit"></i></span></div>
+      <div class="col-md-1 col-1"><span (click)="deleteEntry(i.guid)" class="btn" ><i class="fa fa-remove red"></i></span></div>
     </div>
     <hr />
     <div class="row">
-      <div class="col"></div>
-      <div class="col"></div>
-      <div class="col"><h4 class="red">{{total}} лв.</h4></div>
-      <div class="col"></div>
-      <div class="col"></div>
+      <div class="col-6"></div>
+      <div class="col-6"><h4 class="red">{{total}} лв.</h4></div>
     </div>
 
 
@@ -36,17 +34,20 @@
         <textarea type="text" class="form-control form-control-lg" [(ngModel)]="model.note" name="note"></textarea>
       </div>
       <div class="form-group row">
-        <label for="" class="col-md-9">Value</label>
-        <input type="number" class="form-control form-control-lg col-md-2" name="value" [(ngModel)]="model.value" required />
-
+        <label for="" class="col-md-2">Value</label>
+        <input type="number" class="form-control form-control-lg col-md-4" name="value" [(ngModel)]="model.value" required />
+        <label for="" class="col-md-1">Date</label>
+        <input  class="col-md-2" matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" name="date" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
       </div>
-      <div class="form-group ">
+      <!-- <div class="form-group ">
           <label for="" class="col-md-12">Date</label>
           <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" name="date" required>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
 
-      </div>
+      </div> -->
       <section name="">
         <div class="form-group row">
           <label for="">Period</label>

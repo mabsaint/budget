@@ -27,6 +27,7 @@
     "date-fns": "^1.30.1",
     "font-awesome": "^4.7.0",
     "mobile-angular-ui": "^1.3.4",
+    "moment": "^2.24.0",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"

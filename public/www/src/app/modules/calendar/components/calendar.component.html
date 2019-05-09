@@ -8,7 +8,7 @@
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
   </div>
   <div class="cal-events" *ngIf="day.events.length > 0">
-    <div class="cal-event" *ngFor="let event of day.events; trackBy:trackByEventId" [style.backgroundColor]="event.color?.primary"
+    <div class="cal-event" *ngFor="let event of day.events; trackBy:trackByEventId"
       [ngClass]="event?.cssClass" [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
       [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate" [tooltipAppendToBody]="tooltipAppendToBody"
       mwlDraggable [class.cal-draggable]="event.draggable" dragActiveClass="cal-drag-active" [dropData]="{event: event, draggedFrom: day}"

@@ -7,7 +7,8 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarView
+  CalendarView,
+  DAYS_OF_WEEK
 } from 'angular-calendar';
 
 import {
@@ -28,6 +29,8 @@ import { EntryService } from '../../../services/entry.service';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import {BankAccount} from '../../account/account.model';
 
+import * as moment from 'moment';
+
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -43,6 +46,12 @@ const colors: any = {
   }
 };
 
+moment.updateLocale('bg', {
+  week: {
+    dow: DAYS_OF_WEEK.MONDAY,
+    doy: 0
+  }
+});
 
 @Component({
   selector: 'app-calendar',
@@ -155,7 +164,7 @@ export class CalendarComponent implements OnInit {
         this.events.push({
           start: new Date(element.date),
           //end: element.enddate,
-          title: element.category + ' ' + element.value,
+          title: element.category + ' / ' + (element.note ? element.note : '') + ' ' + element.value,
           color: colors.yellow,
           allDay: true,
           value: element.value,
@@ -164,7 +173,8 @@ export class CalendarComponent implements OnInit {
             beforeStart: true,
             afterEnd: true
           },
-          id: element._id
+          id: element._id,
+          cssClass: element.value > 0 ? 'egreen' : 'ered'
         },
 
         );

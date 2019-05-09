@@ -5,3 +5,22 @@
 ul.nav {
     margin-bottom:10px;
 }
+
+@media screen and (max-width: 400px) {
+  div.list-row {
+    font-size: 0.75rem;
+    border:1px solid #999;
+
+    margin-bottom: 5px;
+  }
+
+  h4 {
+    font-size: 1.15rem;
+  }
+
+  .head {
+    background-color: #178d96;
+    color: #fefefe;
+    padding:3px 3px;
+  }
+  }

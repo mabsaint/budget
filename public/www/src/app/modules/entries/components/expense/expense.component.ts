@@ -38,7 +38,7 @@ export class ExpenseComponent implements OnInit {
   get total(): number {
     let ans = 0;
     this.list.forEach(element => {
-      ans += element.total;
+      ans += element.value;
     });
     return ans;
   }
