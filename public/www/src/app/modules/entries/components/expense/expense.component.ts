@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormControl } from '@angular/forms';
+import { NgForm, FormControl, FormGroup } from '@angular/forms';
 import { Entry, ICategory } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './expense.config';
@@ -17,12 +17,19 @@ export class ExpenseComponent implements OnInit {
   list = new Array();
   submitted = false;
   categories: ICategory[] = [];
+  // subcategories: ICategory[] = [];
   filteredCategories: Observable<ICategory[]>;
+  filteredSubCategories: Observable<ICategory[]>;
   periods = config.periods;
 
   json = JSON;
 
+  myGroup = new FormGroup({
+    catControl: new FormControl()
+  });
+
   catControl: FormControl = new FormControl();
+  subcatControl: FormControl = new FormControl();
 
   private _from: Date = new Date();
   private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth() + 1);
@@ -31,7 +38,7 @@ export class ExpenseComponent implements OnInit {
   get total(): number {
     let ans = 0;
     this.list.forEach(element => {
-      ans += element.total;
+      ans += element.value;
     });
     return ans;
   }
@@ -59,21 +66,48 @@ export class ExpenseComponent implements OnInit {
       this.model.category = v;
     });
 
+
     this.filteredCategories = this.catControl.valueChanges
     .pipe(
       startWith(''),
       map( v => this._filter(v))
     );
 
+    this.subcatControl.valueChanges.subscribe( v => {
+      console.log(v);
+      this.model.subcategory = v;
+    });
+
    this.getEntries();
    this.model = new Entry();
 
   }
 
+  onFocus ( e ) {
+    this.filteredCategories = this.catControl.valueChanges
+    .pipe(
+      startWith(''),
+      map( v => this._filter(v))
+    );
+
+    console.log( this.filteredCategories);
+  }
+
+  onSubFocus ( e ) {
+    /*
+    this.filteredSubCategories = this.catControl.valueChanges
+    .pipe(
+      startWith(''),
+      map( v => this._filter(v))
+    );
+    */
+   console.log( this.model.category );
+  }
+
   _filter(v): ICategory[] {
     const filterValue = v.toLowerCase();
 
-    return this.categories.filter(option => option.title.toLowerCase().includes(filterValue));
+    return this.categories.filter(option => option.title ? option.title.toLowerCase().includes(filterValue) : '');
 
   }
 
@@ -82,9 +116,20 @@ export class ExpenseComponent implements OnInit {
     // Put changes ....
     this.entryService.insertEntry(this.model).subscribe((data: Entry) => {
       this.model = new Entry();
+      this.catControl = new FormControl();
+      this.subcatControl = new FormControl();
       this.getEntries();
     });
     console.log(this.model);
+
+  }
+
+  onCategoryFocus() {
+   this.filteredCategories = this.catControl.valueChanges
+   .pipe(
+     startWith(''),
+     map( v => this._filter(v))
+   );
 
   }
 

@@ -18,8 +18,6 @@ const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27
 
 var db = mongojs(MONGO_CONNECTION, [collectionName]);
 
-
-
 module.exports = {
     /**
      * Creates a new entry
@@ -31,6 +29,35 @@ module.exports = {
         } else {
             item.guid = uuid();
             return new Promise(function (resolve, reject) {
+                // create a new category:
+                db.categories.find({
+                    'title': item.category
+                }, function (err, result) {
+                    if (result.length == 0) {                      
+                        db.categories.insert({
+                            'title': item.category,
+                            'subcategories': [{
+                                "title": item.subcategory
+                            }]
+                        });
+                    } else {
+                       // check for a subcategory
+                        console.log( "Index: " + result[0].subcategories.indexOf({title: item.subcategory}) );
+                        db.categories.findAndModify({
+                            query:{ 'title': item.category},
+                            update:{$push:{ 
+                                'subcategories': {'title': item.subcategory}  
+                            }},
+                            new: false }, function( error, doc) {
+                                if( error ) console.log('Error: ' + error);
+                                else console.log( doc );
+                            })
+                       
+                    }
+                });
+
+                console.log(item);
+
                 if (item.period && item.date && item.enddate) {
                     var toInsert = [];
                     if (item.period == 'daily') { // Daily:
@@ -108,6 +135,9 @@ module.exports = {
                         })
                     });
                 } else {
+
+
+
                     item.date = new Date(item.date)
                     db.entries.save(item, function (err, result) {
                         if (err) {
@@ -135,11 +165,17 @@ module.exports = {
                 var offset = new Date().getTimezoneOffset();
                 var t = Date.parse(start) + (offset * 60000);
                 start = new Date(t);
-                filter.date = { $gte: new Date(start) };
+                filter.date = {
+                    $gte: new Date(start)
+                };
             }
             console.log(filter);
-            db[collectionName].find(filter).sort({ date: 1 }, function (err, result) {
-                let ans = result.sort((a, b) => { a.date > b.date ? 1 : -1 });
+            db[collectionName].find(filter).sort({
+                date: 1
+            }, function (err, result) {
+                let ans = result.sort((a, b) => {
+                    a.date > b.date ? 1 : -1
+                });
                 resolve(ans);
             });
         });
@@ -215,13 +251,19 @@ module.exports = {
 
         return new Promise(function (resolve, reject) {
             var group = {
-                key: { category: 1, guid: 1, type: 1 },
+                key: {
+                    category: 1,
+                    guid: 1,
+                    type: 1
+                },
                 cond: filterObject,
                 reduce: function (curr, result) {
                     result.total += curr.value
                     result.date = curr.date
                 },
-                initial: { total: 0 },
+                initial: {
+                    total: 0
+                },
                 finalize: function (result) {
                     result.value = result.total
                 }
@@ -235,7 +277,9 @@ module.exports = {
 
     deleteEntry: function (id) {
         return new Promise(function (resolve, reject) {
-            db[collectionName].remove({ "_id": db.ObjectId(id) }, function (err, result) {
+            db[collectionName].remove({
+                "_id": db.ObjectId(id)
+            }, function (err, result) {
                 if (err) {
                     reject(err);
                 } else {
@@ -247,7 +291,9 @@ module.exports = {
 
     deleteEntryByGUID: function (guid) {
         return new Promise(function (resolve, reject) {
-            db[collectionName].remove({ "guid": guid }, function (err, result) {
+            db[collectionName].remove({
+                "guid": guid
+            }, function (err, result) {
                 if (err) {
                     reject(err);
                 } else {
@@ -301,13 +347,18 @@ module.exports = {
 
         return new Promise(function (resolve, reject) {
             var group = {
-                key: { category: 1, guid: 1 },
+                key: {
+                    category: 1,
+                    guid: 1
+                },
                 cond: filterObject,
                 reduce: function (curr, result) {
                     result.total += curr.value
                     result.date = curr.date
                 },
-                initial: { total: 0 },
+                initial: {
+                    total: 0
+                },
                 finalize: function (result) {
                     result.value = result.total
                 }
@@ -332,10 +383,12 @@ module.exports = {
     newAccount: function (item) {
         return new Promise(function (resolve, reject) {
             let tmp = JSON.parse(JSON.stringify(item));
-            if(item._id) {
+            if (item._id) {
                 let id = item._id;
                 delete item._id;
-                db.accounts.update({ "_id": db.ObjectId(id) }, item,{},function (error, data) {
+                db.accounts.update({
+                    "_id": db.ObjectId(id)
+                }, item, {}, function (error, data) {
                     if (error) reject(error);
                     else {
                         db.accounts.find({}, function (error, data) {
@@ -355,14 +408,14 @@ module.exports = {
                     }
                 })
             }
-           
+
         })
     },
 
-    getExpenseCategories: function() {
-        return new Promise(function(resolve, reject){
-            db.categories.find({},(error, data) => {
-                if(error) reject(error);
+    getExpenseCategories: function () {
+        return new Promise(function (resolve, reject) {
+            db.categories.find({}, (error, data) => {
+                if (error) reject(error);
                 else resolve(data);
             })
         });

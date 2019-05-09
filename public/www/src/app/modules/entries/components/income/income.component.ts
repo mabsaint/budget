@@ -25,7 +25,7 @@ export class IncomeComponent implements OnInit {
   get total() : number {
     var ans = 0;
     this.list.forEach(element => {
-      ans += element.total
+      ans += element.value
     });
     return ans;
   }
@@ -48,7 +48,7 @@ export class IncomeComponent implements OnInit {
       this.getEntries();
     });
     console.log(this.model);
-    
+
   }
 
   deleteEntry( id ) {
@@ -74,7 +74,7 @@ export class IncomeComponent implements OnInit {
   ngOnInit() {
    this.getEntries();
    this.model = new Entry('income');
-  
+
   }
 
 

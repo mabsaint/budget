@@ -7,7 +7,8 @@ import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
-  CalendarView
+  CalendarView,
+  DAYS_OF_WEEK
 } from 'angular-calendar';
 
 import {
@@ -28,6 +29,8 @@ import { EntryService } from '../../../services/entry.service';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import {BankAccount} from '../../account/account.model';
 
+import * as moment from 'moment';
+
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -43,6 +46,12 @@ const colors: any = {
   }
 };
 
+moment.updateLocale('bg', {
+  week: {
+    dow: DAYS_OF_WEEK.MONDAY,
+    doy: 0
+  }
+});
 
 @Component({
   selector: 'app-calendar',
@@ -113,12 +122,12 @@ export class CalendarComponent implements OnInit {
 
   getTotalTillCurrent(current: Entry, list: Entry[]) {
     let value = this.available;
-    
+    console.log(value);
     let hasBase = list.find((e) => {
       return (e.date == current.date) && e.base;
     });
     let lastBase = list.sort( (a,b) => { return a.date >= b.date ? -1 : 1}).filter(e=>e.base && e.date <= current.date)
-    console.log(lastBase[0]);
+    //console.log(lastBase[0]);
 
     list.sort((a, b) => { return a.date >= b.date ? 1 : -1 });
     if(lastBase[0]) {
@@ -135,7 +144,7 @@ export class CalendarComponent implements OnInit {
 */
     // console.log(current.date + ":" + hasBase)
     // console.log(list);
-    
+
      for (let i = 0; i < list.length; i++) {
       // console.log(current.date + ":" + list[i].value);
       value += list[i].value;
@@ -155,7 +164,7 @@ export class CalendarComponent implements OnInit {
         this.events.push({
           start: new Date(element.date),
           //end: element.enddate,
-          title: element.category + ' ' + element.value,
+          title: element.category + ' / ' + (element.note ? element.note : '') + ' ' + element.value,
           color: colors.yellow,
           allDay: true,
           value: element.value,
@@ -164,7 +173,8 @@ export class CalendarComponent implements OnInit {
             beforeStart: true,
             afterEnd: true
           },
-          id:element._id
+          id: element._id,
+          cssClass: element.value > 0 ? 'egreen' : 'ered'
         },
 
         );
@@ -177,11 +187,11 @@ export class CalendarComponent implements OnInit {
   loadAccounts() {
     this.entryService.getAccounts().subscribe((data) => {
       this.accounts = data;
+      this.loadEvents();
     })
   }
 
   ngOnInit() {
-    this.loadEvents();
     this.loadAccounts();
   }
 
