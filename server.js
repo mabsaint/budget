@@ -46,6 +46,9 @@ app.route('/expense')
         item.value *= -1;
         //console.log(req.body);
         mongoservice.newEntry(item)
+            // .then(function(item2){
+            //     mongoservice.checkCategory
+            // })
             .then(function (result) {
                 res.send(result);
             });
@@ -87,9 +90,38 @@ app.route('/expense/deleteguid/:guid')
             })
     });
 
+app.route('/expense/delete/:guid')
+    .get(function (req, res) {
+        res.send(req.params.guid);
+    })
+    .put(function (req, res) {
+        mongoservice.deleteEntry(req.params.guid)
+            .then(function (result) {
+                res.send(result)
+            })
+});
+
 app.route('/income')
     .get(function (req, res) {
         mongoservice.getIncomeEntries()
+            .then(function (result) {
+                res.send(result);
+            });
+    })
+    .post(function (req, res) {
+        var item = req.body;
+        item.type = 'income';
+        //console.log(req.body);
+        mongoservice.newEntry(item)
+            .then(function (result) {
+                res.send(result);
+            });
+
+    });
+
+    app.route('/income/:start/:end')
+    .get(function (req, res) {
+        mongoservice.getIncomeEntries(req.params.start, req.params.end)
             .then(function (result) {
                 res.send(result);
             });
@@ -152,7 +184,7 @@ app.route('/accounts')
         })
     })
 
-app.route('/categories')
+    app.route('/categories')
     .get(function(req, res){
         mongoservice.getExpenseCategories()
         .then(function(data){
