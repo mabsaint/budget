@@ -62,12 +62,13 @@ export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
   events: Array<CalendarEvent<{ time: any }>>;
   view: string = CalendarView.Month;
-  accounts:BankAccount[];
+  accounts: BankAccount[];
 
-  get available() : number {
+  get available(): number {
     let sum = 0;
-    if(this.accounts)
-    this.accounts.forEach(e => sum += e.value)
+    if (this.accounts) {
+      this.accounts.forEach(e => sum += e.value)
+    }
     return sum;
   }
   /* = [
@@ -145,10 +146,8 @@ export class CalendarComponent implements OnInit {
     // console.log(current.date + ":" + hasBase)
     // console.log(list);
 
-     for (let i = 0; i < list.length; i++) {
-      // console.log(current.date + ":" + list[i].value);
+    for (let i = 0; i < list.length; i++) {
       value += list[i].value;
-
     }
    // console.log(value);
     return value;
@@ -163,11 +162,12 @@ export class CalendarComponent implements OnInit {
 
         this.events.push({
           start: new Date(element.date),
-          //end: element.enddate,
           title: element.category + ' / ' + (element.note ? element.note : '') + ' ' + element.value,
           color: colors.yellow,
           allDay: true,
           value: element.value,
+          income: (element.type == 'income' ? element.value : 0),
+          expense: (element.type == 'expense' ? element.value : 0),
           total: this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data))),
           resizable: {
             beforeStart: true,

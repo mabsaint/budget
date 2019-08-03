@@ -1,8 +1,15 @@
 <ng-template #customCellTemplate let-day="day" let-locale="locale">
   <div class="cal-cell-top">
 
-    <span [ngClass]="sum(day.events,'value') > 0 ? 'red' : 'red'" *ngIf='day.events.length > 0'>{{ day.events |
+    <span [ngClass]="'span-green'" *ngIf='day.events.length > 0'>Income: {{ day.events |
+      sum:'income' }} лв.</span><br/>
+    <span [ngClass]="'span-red'" *ngIf='day.events.length > 0'>Expense: {{ day.events |
+        sum:'expense' }} лв.</span><br/>
+    <span class='hr' *ngIf='day.events.length > 0'></span>
+    <span [ngClass]="sum(day.events,'value') > 0 ? 'span-balanse' : 'span-balanse'" *ngIf='day.events.length > 0'>
+      Balanse: <span [ngClass]="sum(day.events,'value') > 0 ? 'span-balanse' : 'span-balanse'"></span>{{ day.events |
       sum:'value' }} лв.</span>
+
     <span [ngClass]="day.events[0].total > 0 ? 'cal-day-badge green' : 'cal-day-badge red'" *ngIf='day.events.length > 0'>{{
       day.events[0].total }} лв.</span>
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>

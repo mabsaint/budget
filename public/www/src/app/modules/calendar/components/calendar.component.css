@@ -4,9 +4,32 @@
 
 .ered {
   background-color: #e27e7e;
+  font-size: 75%;
 }
 
 .egreen {
   background-color: #7ee27e;
+  font-size: 75%;
+}
+
+.span-red {
+  color: #e27e7e;
+  font-size: 75%;
+}
+
+.span-green {
+  color: #7ee27e;
+  font-size: 75%;
+}
+
+.span-balanse {
+  color: #555;
+  font-size: 75%;
+}
+
+span.hr {
+  width:50%;
+  display:block;
+  border-top:1px solid #aaa;
 }
 

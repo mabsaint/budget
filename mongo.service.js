@@ -13,7 +13,8 @@ const CALENDAR_FILTER = {
     type: 'expense'
 };
 
-const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@127.0.0.1:27017/budget'
+// const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@127.0.0.1:27017/budget'
+const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
 //var db = mongojs("mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev", [collectionName]);
 var db = mongojs(MONGO_CONNECTION, [collectionName]);
 
