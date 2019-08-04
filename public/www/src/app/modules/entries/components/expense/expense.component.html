@@ -2,7 +2,8 @@
   <div class="col-md-12 col-sm-12 col-12">
     <h4>Expenses</h4>
     <filter-date (changed)='setInterval($event)'></filter-date>
-    <div class="row list-row" *ngFor="let i of list">
+
+    <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
       <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>
       <div class="col-md-2 col-2" >{{i.category}}</div>
       <div class="col-md-4 col-4" >{{i.note}}</div>

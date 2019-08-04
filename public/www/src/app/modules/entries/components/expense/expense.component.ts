@@ -160,6 +160,10 @@ export class ExpenseComponent implements OnInit {
    this.getEntries();
   }
 
+  getDate(date: Date) {
+    return new Date(date).getDate();
+  }
+
   get diagnostic() { return JSON.stringify(this.model); }
 
 

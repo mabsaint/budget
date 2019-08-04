@@ -6,6 +6,9 @@ ul.nav {
     margin-bottom:10px;
 }
 
+.account-title {
+  color: #700;
+}
 @media screen and (max-width: 400px) {
   div.list-row {
     font-size: 0.75rem;
