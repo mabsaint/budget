@@ -62,4 +62,8 @@ export class EntryService {
     return this.http.get<any[]>(this.url + 'categories');
   }
 
+  getGroupedExpenses(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'grouped');
+  }
+
 }
