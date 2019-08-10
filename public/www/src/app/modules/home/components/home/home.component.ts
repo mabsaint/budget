@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
       text: 'Expenses in BGN'
    },
    tooltip: {
-    pointFormat: '{series.name}: <b>{point.y:.1f} лв.</b>'
+    pointFormat: '{point.name}: <b>{point.y:.1f} лв.</b>'
   },
    plotOptions : {
       cylinder: {
@@ -93,20 +93,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.entryService.getGroupedExpenses().subscribe( data => {
       console.log(data);
-      var perc = [];
-      var total = 0;
+      let perc = [];
+      let total = 0;
       data.forEach( e => {
+        e.name = e.name ? e.name : 'Other';
         total += e.y;
       });
 
       data.forEach( e => {
-        perc.push({name: e.name, y: parseFloat( ( (e.y / total) * 100 ).toFixed(2) )});
+        perc.push({name: e.name ? e.name : 'Other', y: parseFloat( ( (e.y / total) * 100 ).toFixed(2) )});
       });
       console.log(perc);
       this.options.series[0].data = perc;
       this.cylOptions.series[0].data = data;
-      Highcharts.chart('pie', this.options);
-      Highcharts.chart('cylinder', this.cylOptions);
+      Highcharts.chart('pie', this.options); //.setSize(300, 200);
+      Highcharts.chart('cylinder', this.cylOptions); //.setSize(300, 200);
     });
 
   }
