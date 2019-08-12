@@ -174,13 +174,14 @@ export class CalendarComponent implements OnInit {
             afterEnd: true
           },
           id: element._id,
+          weekday: new Date(element.date).getDay(),
           cssClass: element.value > 0 ? 'egreen' : 'ered'
         },
 
         );
       });
 
-       console.log(data);
+       console.log(this.events);
     })
   }
 

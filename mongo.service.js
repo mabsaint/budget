@@ -14,7 +14,7 @@ const CALENDAR_FILTER = {
 };
 
 // const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@127.0.0.1:27017/budget'
-const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
+ const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
 //var db = mongojs("mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev", [collectionName]);
 var db = mongojs(MONGO_CONNECTION, [collectionName]);
 
@@ -389,8 +389,58 @@ module.exports = {
 
     deleteAccount: function (item) {
 
-    }
+    },
 
+    groupedByCategory: function ( start = null, end = null) {
+        var query = "db.entries.aggregate([{ \
+                $match:{\
+                    date:" + {
+                        "$gte":  new Date() 
+                    } + "\
+                }\
+            },\
+            {\
+                $group:{_id:'$category',\
+                total:{$sum:'$value'}\
+            }\
+        }])";
+        var startDate = new Date()
+        if (!start) {
+            startDate = new Date( startDate.getFullYear(), startDate.getMonth(), 1);
+        } else {
+            startDate = new Date( start );
+        }
+        return new Promise(function (resolve, reject) {
+            
+            db.entries.aggregate([{ 
+                $match:{ 
+                    type:'expense', 
+                    date:{ $gte: startDate } 
+                }}, 
+                { $group:{
+                    _id:'$category', 
+                    total:{$sum:'$value'
+                }}
+            }], (error, data) => {
+                if (error) reject(error);
+                else resolve(data);
+            })
+            
+        });
+    },
+
+    getLoginInfo: function ()
+    {
+        return new Promise( function(resolve, reject) {
+            db.user.findOne({'type':'admin'}, function(error, data) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            })
+        })
+    }
     // #endregion
 
 }
