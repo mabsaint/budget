@@ -46,7 +46,7 @@ export class EntryService {
   }
 
   deleteEntry( id: String): Observable<void> {
-    return this.http.put<void>(this.url + 'expense/deleteguid/'+id, id);
+    return this.http.put<void>(this.url + 'expense/delete/'+id, id);
   }
 
   insertAccount(account:  BankAccount): Observable<BankAccount[]> {

@@ -1,6 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="container-fluid">
-  <div class="row navbar navbar-app navbar-absolute-top">
+<div class="container-fluid" >
+  <div class="row navbar navbar-app navbar-absolute-top" *ngIf="nav.visible">
       <ul class="nav nav-pills">
         <li class="nav-item">
             <a routerLink="/" class="nav-link" routerLinkActive='' >Home</a>
@@ -17,6 +17,9 @@
         <li class="nav-item">
             <a routerLink="/calendar" class="nav-link" routerLinkActive='active' >Calendar</a>
         </li>
+        <li class="nav-item">
+          <a routerLink="/logout" class="nav-link" routerLinkActive='active' >Log out</a>
+      </li>
       </ul>
   </div>
 <router-outlet></router-outlet>

@@ -8,30 +8,49 @@ import { CalendarComponent } from 'src/app/modules/calendar/components/calendar.
 import { AccountComponent } from 'src/app/modules/account/components/account/account.component';
 
 import { HomeModule } from 'src/app/modules/home/home.module';
-import { EntriesModule } from 'src/app/modules/entries/entries.module'; 
+import { EntriesModule } from 'src/app/modules/entries/entries.module';
 import { MyCalendarModule } from 'src/app/modules/calendar/calendar.module';
 import { AccountModule } from 'src/app/modules/account/account.module';
+import { LoginComponent } from 'src/app/modules/login/login.component';
+import { LogoutComponent } from './login/logout/logout.component';
+
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'accounts',
-    component: AccountComponent
+    component: AccountComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'expenses',
-    component: ExpenseComponent
+    component: ExpenseComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'incomes',
-    component: IncomeComponent
+    component: IncomeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'calendar',
-    component: CalendarComponent
+    component: CalendarComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent,
+
+    canActivate: [AuthGuard]
   }
 ];
 

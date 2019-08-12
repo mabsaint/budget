@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavbarService } from './services/navbar.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'www';
+  constructor(public nav: NavbarService) {}
 }

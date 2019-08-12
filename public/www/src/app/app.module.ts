@@ -4,21 +4,27 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule, FormsModule} from '@angular/forms';
 
-import{ BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './modules/login/login.component';
+import { LogoutComponent } from './login/logout/logout.component';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
-    
+    AppComponent,
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
