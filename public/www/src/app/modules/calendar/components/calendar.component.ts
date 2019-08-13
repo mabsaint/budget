@@ -175,6 +175,7 @@ export class CalendarComponent implements OnInit {
           },
           id: element._id,
           weekday: new Date(element.date).getDay(),
+          weeknumber: this.getWeekNumber(new Date(element.date)),
           cssClass: element.value > 0 ? 'egreen' : 'ered'
         },
 
@@ -194,6 +195,21 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
+  }
+
+  getWeekNumber( d: Date ): number {
+     // Copy date so don't modify original
+     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+     // Set to nearest Thursday: current date + 4 - current day number
+     // Make Sunday's day number 7
+     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+     // Get first day of year
+     const yearStart: Date = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const newLocal: number = (d.getTime() - yearStart.getTime());
+     // Calculate full weeks to nearest Thursday
+     const weekNo: number = Math.ceil(( ( newLocal / 86400000) + 1) / 7);
+     // Return array of year and week number
+     return  weekNo;
   }
 
 }

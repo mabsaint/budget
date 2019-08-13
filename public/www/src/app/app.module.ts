@@ -12,11 +12,12 @@ import { LogoutComponent } from './login/logout/logout.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
