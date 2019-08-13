@@ -9,7 +9,7 @@ export class Entry {
     public period?: string;
     public _id: string;
     public type: string;
-    public base: boolean = false;
+    public base = false;
     constructor(type: string = 'expense') { this.type = type; }
 }
 

@@ -23,7 +23,7 @@ import {
 } from 'date-fns';
 
 import { Subject } from 'rxjs';
-import { Entry } from "../../entries/models/entry";
+import { Entry } from '../../entries/models/entry';
 
 import { EntryService } from '../../../services/entry.service';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
@@ -67,7 +67,7 @@ export class CalendarComponent implements OnInit {
   get available(): number {
     let sum = 0;
     if (this.accounts) {
-      this.accounts.forEach(e => sum += e.value)
+      this.accounts.forEach(e => sum += e.value);
     }
     return sum;
   }
@@ -116,7 +116,7 @@ export class CalendarComponent implements OnInit {
 
   sum(events: any[], value: string) {
     let q = 0;
-    events.forEach((e) => { e[value] ? q += e[value] : q += 0 });
+    events.forEach((e) => { e[value] ? q += e[value] : q += 0; });
 
     return q;
   }
@@ -124,18 +124,18 @@ export class CalendarComponent implements OnInit {
   getTotalTillCurrent(current: Entry, list: Entry[]) {
     let value = this.available;
     console.log(value);
-    let hasBase = list.find((e) => {
-      return (e.date == current.date) && e.base;
+    const hasBase = list.find((e) => {
+      return (e.date === current.date) && e.base;
     });
-    let lastBase = list.sort( (a,b) => { return a.date >= b.date ? -1 : 1}).filter(e=>e.base && e.date <= current.date)
-    //console.log(lastBase[0]);
+    const lastBase = list.sort( (a, b) => a.date >= b.date ? -1 : 1).filter(e => e.base && e.date <= current.date);
+    // console.log(lastBase[0]);
 
-    list.sort((a, b) => { return a.date >= b.date ? 1 : -1 });
-    if(lastBase[0]) {
+    list.sort((a, b) => a.date >= b.date ? 1 : -1 );
+    if (lastBase[0]) {
       value = lastBase[0].value;
-      list = list.filter((a) => { return a.date >= lastBase[0].date && a.date <= current.date && !a.base });
+      list = list.filter((a) => a.date >= lastBase[0].date && a.date <= current.date && !a.base );
     } else {
-      list = list.filter((a) => { return (a.date <= current.date)  });
+      list = list.filter((a) => a.date <= current.date);
     }
     /*
     if(!hasBase)
@@ -166,8 +166,8 @@ export class CalendarComponent implements OnInit {
           color: colors.yellow,
           allDay: true,
           value: element.value,
-          income: (element.type == 'income' ? element.value : 0),
-          expense: (element.type == 'expense' ? element.value : 0),
+          income: (element.type === 'income' ? element.value : 0),
+          expense: (element.type === 'expense' ? element.value : 0),
           total: this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data))),
           resizable: {
             beforeStart: true,
@@ -183,14 +183,14 @@ export class CalendarComponent implements OnInit {
       });
 
        console.log(this.events);
-    })
+    });
   }
 
   loadAccounts() {
     this.entryService.getAccounts().subscribe((data) => {
       this.accounts = data;
       this.loadEvents();
-    })
+    });
   }
 
   ngOnInit() {
