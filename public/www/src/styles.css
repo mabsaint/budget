@@ -1,6 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.container2 {
+  width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
 
 ul.nav {
     margin-bottom:10px;
@@ -26,4 +35,55 @@ ul.nav {
     color: #fefefe;
     padding:3px 3px;
   }
+  }
+
+  .topnav {
+    overflow: hidden;
+    background-color: #dcdcdc;
+  }
+
+  .topnav a {
+    float: left;
+    display: block;
+    color: #212529;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav a:hover {
+    background-color: #fdfdfd;
+    color: black;
+  }
+
+  .topnav a.active {
+    background-color: #fdfdfd;
+    color: black;
+  }
+
+  .topnav .icon {
+    display: none;
+  }
+
+  @media screen and (max-width: 670px) {
+    .topnav a {display: none;}
+    .topnav a.icon {
+      float: right;
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 670px) {
+    .topnav.responsive {position: relative;}
+    .topnav.responsive .icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .topnav.responsive a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
   }

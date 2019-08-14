@@ -168,6 +168,16 @@ app.route('/all/:start')
             res.send(result);
         })
     })
+
+app.route('/allmonth')
+    .get(function(req, res){
+        mongoservice.getAllThisMonth()
+        .then(function (result) {
+           // var ans = result.reduce((a,b) => a + b['value'], 0)
+            res.send(result);
+        })
+    })
+
 /** Accounts */
 app.route('/accounts')
     .get(function(req, res){
@@ -193,6 +203,38 @@ app.route('/accounts')
     })
     .post(function(req, res){
 
+    })
+
+    app.route('/grouped')
+    .get(function(req, res){
+        mongoservice.groupedByCategory()
+        .then(function(data){
+           let answer = [];
+           data.forEach(element => {
+              answer.push({name: element._id, y: element.total * (-1)}) 
+           });
+            res.send(answer)
+        })
+    })
+
+    app.route('/grouped/:start')
+    .get(function(req, res){
+        mongoservice.groupedByCategory(req.params.start)
+        .then(function(data){
+           let answer = [];
+           data.forEach(element => {
+              answer.push({name: element._id, y: element.total * (-1)}) 
+           });
+            res.send(answer)
+        })
+    })
+
+    app.route('/logininfo')
+    .get(function(request, response){
+        mongoservice.getLoginInfo()
+        .then(function(data) {
+            response.send(data)
+        })
     })
 
 app.use(function (req, res, next) {

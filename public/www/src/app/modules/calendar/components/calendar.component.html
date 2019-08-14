@@ -8,12 +8,12 @@
     <span class='hr' *ngIf='day.events.length > 0'></span>
     <span [ngClass]="sum(day.events,'value') > 0 ? 'span-balanse' : 'span-balanse'" *ngIf='day.events.length > 0'>
       Balanse: <span [ngClass]="sum(day.events,'value') > 0 ? 'span-balanse' : 'span-balanse'"></span>{{ day.events |
-      sum:'value' }} лв.</span>
-
-
+      sum:'value' }} лв.</span><br/>
+    <span *ngIf='day.events.length > 0 && day.events[0].weekday == 0' class='span-balanse'>Weekly: {{events | sumweekly:day.events[0].weeknumber}}</span>
+<br/>
     <span [ngClass]="day.events[0].total > 0 ? 'cal-day-badge green' : 'cal-day-badge red'" *ngIf='day.events.length > 0'>{{
       day.events[0].total }} лв.</span>
-      <span *ngIf='day.events.length > 0 && day.events[0].weekday == 0'>Weekly:</span>
+
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
   </div>
   <div class="cal-events" *ngIf="day.events.length > 0">

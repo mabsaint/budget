@@ -157,6 +157,30 @@ module.exports = {
         });
     },
 
+    /**
+     * Retrieves all entries based on started date     * 
+     * @param  {} start=null
+     */
+    getAllThisMonth: function () {
+        return new Promise(function (resolve, reject) {
+            var filter = {};
+           
+                var offset = new Date().getTimezoneOffset();
+                offset = -3;
+                var today = new Date();
+                var t1 = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0);
+                var t2 = new Date(today.getFullYear(), today.getMonth()+1, 1, 0, 0, 0);
+                
+                filter.date = { $gte: t1, $lt: t2 };
+           
+            console.log(filter);
+            db[collectionName].find(filter).sort({ date: 1 }, function (err, result) {
+                let ans = result.sort((a, b) => { a.date > b.date ? 1 : -1 });
+                resolve(ans);
+            });
+        });
+    },
+
     getEntries: function (start = null, end = null) {
         var filterObject = JSON.parse(JSON.stringify(CALENDAR_FILTER));
         if (start) {
