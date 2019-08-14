@@ -1,23 +1,15 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-12">
     <h4>Expenses</h4>
-    <filter-date (changed)='setInterval($event)'></filter-date>
 
-    <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
+    <!-- <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
       <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>
       <div class="col-md-2 col-2" >{{i.category}}</div>
       <div class="col-md-4 col-4" >{{i.note}}</div>
       <div class="col-md-2 col-3">{{i.value}} лв.</div>
       <div class="col-md-1 col-1"><span (click)="editEntry(i)" class=""><i class="fa fa-edit"></i></span></div>
       <div class="col-md-1 col-1"><span (click)="deleteEntry(i._id)" class=""><i class="fa fa-remove red"></i></span></div>
-    </div>
-    <hr />
-    <div class="row">
-      <div class="col-md-8 col-6"></div>
-      <div class="col-md-2 col-6">
-        <h4 class="red">{{total}} лв.</h4>
-      </div>
-     </div>
+    </div> -->
   </div>
   <div class="col-md-12 col-12">
     <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup">
@@ -94,6 +86,45 @@
       <button type="submit" class="btn btn-primary" [disabled]="f.className.indexOf('ng-invalid')>-1">Add</button>
 
     </form>
+    <filter-date (changed)='setInterval($event)'></filter-date>
+    <div class="row">
+        <div class="col-md-2 col-6"> <h4 class="red">{{total}} лв.</h4></div>
+        <div class="col-md-8 col-6"></div>
+    </div>
+    <div class="conent">
+        <div class="row list-row" *ngFor="let i of list; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'">
 
+
+          <div class="col-md-2 col-2 left text-right"><span  *ngIf="x==0 || (x>0 && i.date !== list[x-1].date)">{{i.date | date:'dd MMM'}}</span></div>
+            <div class="col-md-6 col-10 right">
+              <div class="panel panel-default">
+                <div class="panel-head">
+                  <div class="row">
+                  <div class="col-md-8 col-8">{{i.category}}</div>
+                  <div class="col-md-4 col-4 text-right">
+                      <span (click)="editEntry(i)" class=""><i class="fa fa-edit"></i></span>&nbsp;&nbsp;
+                      <span (click)="deleteEntry(i._id)" class=""><i class="fa fa-remove red"></i></span>
+                  </div>
+                </div>
+                </div>
+                <div class="panel-body">
+                  {{i.note}}<br/>
+                  <span class="red"><strong>{{i.value}} лв.</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4"></div>
+            <!-- <div class="col-md-2 col-2" >{{i.category}}</div>
+            <div class="col-md-4 col-4" >{{i.note}}</div>
+            <div class="col-md-2 col-3">{{i.value}} лв.</div>
+            <div class="col-md-1 col-1"><span (click)="editEntry(i)" class=""><i class="fa fa-edit"></i></span></div>
+            <div class="col-md-1 col-1"><span (click)="deleteEntry(i._id)" class=""><i class="fa fa-remove red"></i></span></div> -->
+        </div>
+    </div>
+  </div>
+
+  <div class="col-12 row">
+      <div class="col-md-2 col-6"> <h4 class="red">{{total}} лв.</h4></div>
+      <div class="col-md-8 col-6"></div>
   </div>
 </div>

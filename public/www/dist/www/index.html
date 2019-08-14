@@ -7,10 +7,25 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="stylesheet" href="styles.19a5ba755fe2415c240b.css"></head>
+<link rel="stylesheet" href="styles.4388f3ff60c9bd9a6120.css"></head>
 <body>
-  <div class="container">
+  <div class="container2">
       <app-root></app-root>
   </div>
-<script type="text/javascript" src="runtime.b57bf819d5bdce77f1c7.js"></script><script type="text/javascript" src="polyfills.3d6190b09e80afe45485.js"></script><script type="text/javascript" src="main.c563e38ba61bdcaaba2a.js"></script></body>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+
+      $("a.nav-link").bind('click', function(){
+        console.log('click');
+      });
+      </script>
+<script type="text/javascript" src="runtime.b57bf819d5bdce77f1c7.js"></script><script type="text/javascript" src="polyfills.3d6190b09e80afe45485.js"></script><script type="text/javascript" src="main.b55fff95ec7ce83df204.js"></script></body>
 </html>

@@ -1,16 +1,44 @@
 .red {
-    color: red;
+    color: #D54431;
 }
 
 .list-row {
-  border-bottom:1px solid #cdcdcd;
+  /* border-bottom:1px solid #dcdcdc; */
+  /* padding: 5px 0px 5px 0px; */
 }
 
 .odd {
-  background-color: #dfdfdf;
+  background-color: #efefef;
 }
 
 .form-control {
-  margin: 0 3 3 0;
+  margin: 0px 3px 3px 0px;
 }
 
+.left {
+  border-right: 1px solid black;
+}
+
+.panel {
+  border: 1px solid #dedede;
+  padding: 5px;
+  margin: 0px 5px 5px 5px;
+}
+
+.newdate-row {
+  padding-top: 5px;
+}
+
+.panel-head {
+  background-color: #efefef;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.panel-body {
+ padding: 10px;
+}
+
+.panel {
+  padding: 0px;
+}
