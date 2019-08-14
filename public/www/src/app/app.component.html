@@ -1,7 +1,17 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="container-fluid" >
-  <div class="row navbar navbar-app navbar-absolute-top" *ngIf="nav.visible">
-      <ul class="nav nav-pills">
+    <!-- <div class="row navbar navbar-app navbar-absolute-top topnav" *ngIf="nav.visible" id="myTopnav"> -->
+    <div class="topnav" *ngIf="nav.visible" id="myTopnav">
+      <a routerLink="/" class="nav-link" routerLinkActive='' >Home</a>
+      <a routerLink="/accounts" class="nav-link" routerLinkActive='active' >Accounts</a>
+      <a routerLink="/expenses" class="nav-link" routerLinkActive='active' >Expenses</a>
+      <a routerLink="/incomes" class="nav-link" routerLinkActive='active' >Incomes</a>
+      <a routerLink="/calendar" class="nav-link" routerLinkActive='active' >Calendar</a>
+      <a routerLink="/logout" class="nav-link" routerLinkActive='active' >Log out</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()" id="hamb">
+          <i class="fa fa-bars"></i>
+        </a>
+    <!-- <ul class="nav nav-pills">
         <li class="nav-item">
             <a routerLink="/" class="nav-link" routerLinkActive='' >Home</a>
         </li>
@@ -20,7 +30,7 @@
         <li class="nav-item">
           <a routerLink="/logout" class="nav-link" routerLinkActive='active' >Log out</a>
       </li>
-      </ul>
+      </ul> -->
   </div>
 <router-outlet></router-outlet>
 

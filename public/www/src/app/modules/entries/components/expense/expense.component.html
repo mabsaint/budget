@@ -22,25 +22,37 @@
   <div class="col-md-12 col-12">
     <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup">
       <div class="form-group row">
-        <label for="" class="col-md-12">Category</label>
-
         <!-- <select [(ngModel)]="model.category" name="category" class="form-control col-md-12" required>
           <option *ngFor='let k of categories' [value]="k.title">{{k.title}}</option>
         </select> -->
-        <input type="text" matInput [formControl]="catControl" name="category" class="form-control col-md-12"
-          [matAutocomplete]='auto' (focus)='onFocus($event)' catControl='model.category'>
+        <input type="text" matInput [formControl]="catControl" name="category" class="form-control col-md-3"
+          [matAutocomplete]='auto' (focus)='onFocus($event)' catControl='model.category' placeholder="Category">
 
         <mat-autocomplete #auto='matAutocomplete'>
           <mat-option *ngFor="let category of filteredCategories | async" [value]='category.title'>
             {{category.title}}
           </mat-option>
         </mat-autocomplete>
+        <input placeholder='0.00' type="text" class="form-control col-md-1" name="value" [(ngModel)]="model.value" [ngModelOptions]="{standalone: true}"
+        required />
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" [ngModelOptions]="{standalone: true}" name="date" class="form-control col-md-2"
+        required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <select name="period" id="" class="form-control col-md-2" [(ngModel)]="model.period" [ngModelOptions]="{standalone: true}" >
+          <option *ngFor="let i of periods" [value]="i.key">{{i.value}}</option>
+        </select>
+        <input matInput [matDatepicker]="endpicker" class="form-control col-md-2" placeholder="Choose a date" [(ngModel)]="model.enddate" [ngModelOptions]="{standalone: true}" name="enddate"
+        [hidden]='!model.period' >
+      <mat-datepicker-toggle matSuffix [for]="endpicker" [hidden]='!model.period'></mat-datepicker-toggle>
+      <mat-datepicker #endpicker [hidden]='!model.period'></mat-datepicker>
+
       </div>
-      <div class="form-group row">
+      <!-- <div class="form-group row">
         <label for="" class="col-md-12">SubCategory</label>
-        <!-- <select [(ngModel)]="model.subcategory" name="subcategory" class="form-control col-md-12" >
+        <! -- <select [(ngModel)]="model.subcategory" name="subcategory" class="form-control col-md-12" >
           <option *ngFor='let k1 of subcategories' [value]="k1">{{k1}}</option>
-        </select> -->
+        </select> -- >
         <input type="text" matInput [formControl]="subcatControl" name="subcategory" class="form-control col-md-12"
           [matAutocomplete]='subauto' (focus)='onSubFocus($event)'>
 
@@ -49,25 +61,25 @@
             {{subcategory.title}}
           </mat-option>
         </mat-autocomplete>
-      </div>
+      </div> -->
       <div class="form-group row">
-        <label for="" class="col-md-12">Note</label>
-        <textarea type="text" class="form-control form-control-lg" [(ngModel)]="model.note" [ngModelOptions]="{standalone: true}" name="note"></textarea>
+        <!-- <label for="" class="col-md-12">Note</label> -->
+        <textarea type="text" class="form-control form-control-lg" [(ngModel)]="model.note" [ngModelOptions]="{standalone: true}" name="note" placeholder='Note'></textarea>
       </div>
-      <div class="form-group row">
+      <!-- <div class="form-group row">
         <label for="" class="col-md-9">Value</label>
         <input type="number" class="form-control form-control-lg col-md-3" name="value" [(ngModel)]="model.value" [ngModelOptions]="{standalone: true}"
           required />
-      </div>
-      <div class="form-group ">
+      </div> -->
+      <!-- <div class="form-group ">
         <label for="" class="col-md-12">Date</label>
         <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" [ngModelOptions]="{standalone: true}" name="date"
           required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
 
-      </div>
-      <section name="">
+      </div> -->
+      <!-- <section name="">
         <div class="form-group row">
           <label for="">Period</label>
           <select name="period" id="" class="form-control" [(ngModel)]="model.period" [ngModelOptions]="{standalone: true}">
@@ -76,13 +88,9 @@
         </div>
         <div class="form-group ">
           <label for="" class="col-md-12" [hidden]='!model.period'>End Date</label>
-          <input matInput [matDatepicker]="endpicker" placeholder="Choose a date" [(ngModel)]="model.enddate" [ngModelOptions]="{standalone: true}" name="enddate"
-            [hidden]='!model.period'>
-          <mat-datepicker-toggle matSuffix [for]="endpicker" [hidden]='!model.period'></mat-datepicker-toggle>
-          <mat-datepicker #endpicker [hidden]='!model.period'></mat-datepicker>
 
         </div>
-      </section>
+      </section> -->
       <button type="submit" class="btn btn-primary" [disabled]="f.className.indexOf('ng-invalid')>-1">Add</button>
 
     </form>
