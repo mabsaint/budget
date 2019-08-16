@@ -14,7 +14,7 @@ export class FilterPipe implements PipeTransform {
       if (!e.category) {
         return true;
       }
-      return e.category.indexOf(args) > -1
+      return e.category.indexOf(args) > -1;
     });
     return value.filter(e => e.category.indexOf(args) > -1);
   }
