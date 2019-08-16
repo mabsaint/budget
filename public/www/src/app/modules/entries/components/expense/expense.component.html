@@ -88,28 +88,34 @@
     </form>
     <filter-date (changed)='setInterval($event)'></filter-date>
     <div class="row">
-        <div class="col-md-2 col-6"> <h4 class="red">{{total}} лв.</h4></div>
-        <div class="col-md-8 col-6"></div>
+        <div class="col-md-2 col-6"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
+        <div class="col-md-8 col-6">
+          <input type='filter' [(ngModel)]='nfilter' />
+        </div>
     </div>
     <div class="conent">
-        <div class="row list-row" *ngFor="let i of list; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'">
+        <div class="row list-row" *ngFor="let i of list | filter:nfilter; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'">
 
 
-          <div class="col-md-2 col-2 left text-right"><span  *ngIf="x==0 || (x>0 && i.date !== list[x-1].date)">{{i.date | date:'dd MMM'}}</span></div>
-            <div class="col-md-6 col-10 right">
+          <div class="col-md-2 col-3 left text-right"><span  *ngIf="x==0 || (x>0 && i.date !== list[x-1].date)" class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}}
+            <span class='span-val red'>{{getDailyExpense(i.date)}} лв.</span></span>
+
+          </div>
+            <div class="col-md-6 col-9 right">
               <div class="panel panel-default">
                 <div class="panel-head">
                   <div class="row">
                   <div class="col-md-8 col-8">{{i.category}}</div>
                   <div class="col-md-4 col-4 text-right">
-                      <span (click)="editEntry(i)" class=""><i class="fa fa-edit"></i></span>&nbsp;&nbsp;
-                      <span (click)="deleteEntry(i._id)" class=""><i class="fa fa-remove red"></i></span>
+                    <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp;
+                    <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
+                    <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
                   </div>
                 </div>
                 </div>
                 <div class="panel-body">
                   {{i.note}}<br/>
-                  <span class="red"><strong>{{i.value}} лв.</strong></span>
+                  <span class="red"><strong [ngClass]="i.paid ? 'strike' : ''" >{{i.value}} лв.</strong></span>
                 </div>
               </div>
             </div>

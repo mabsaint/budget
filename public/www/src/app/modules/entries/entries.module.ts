@@ -6,8 +6,7 @@ import { FilterDateComponent } from './components/filter-date.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
-
-
+import { PipeModule } from '../../core/pipes/pipes.modddue';
 
 @NgModule({
   declarations: [ExpenseComponent, IncomeComponent, FilterDateComponent],
@@ -18,7 +17,8 @@ import { MatNativeDateModule, MatFormFieldModule, MatAutocompleteModule } from '
     MatNativeDateModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipeModule
   ],
   exports: [ExpenseComponent, IncomeComponent]
 })

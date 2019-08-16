@@ -10,6 +10,7 @@ export class Entry {
     public _id: string;
     public type: string;
     public base = false;
+    public paid?: boolean;
     constructor(type: string = 'expense') { this.type = type; }
 }
 

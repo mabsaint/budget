@@ -204,6 +204,8 @@ private events: Array<any>;
         const values = [];
         const xaxis = [];
 
+        data = data.filter( e => new Date(e.date) > new Date() && moment(e.date) <= moment().endOf('month'));
+
         data.forEach(element => {
 
           const el = this.events.find(e => e.start === new Date(element.date).getDate());

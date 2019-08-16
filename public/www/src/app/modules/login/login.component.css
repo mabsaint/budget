@@ -1,13 +1,20 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
+h1 {
+  margin-top: 10%;
+}
 .login {
-  width: 400px;
+  /* width: 400px; */
   margin: 16px auto;
   font-size: 16px;
+  width: 30%;
+  min-width: 300px;
+  display:block;
+
 }
 
 .login-header,
-.login p {
+.login div {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -35,7 +42,7 @@
   padding: 12px;
 }
 
-.login p {
+.login div.row {
   padding: 12px;
 }
 
@@ -64,14 +71,16 @@
 }
 
 .login input[type="submit"] {
-  background: rgb(5, 30, 112);
+  background: #178d96;
   border-color: transparent;
   color: #fff;
   cursor: pointer;
+  width: 100%;
 }
 
 .login input[type="submit"]:hover {
   background: #17c;
+
 }
 
 .login input[type="submit"]:focus {

@@ -5,6 +5,7 @@ import { EntryService } from '../../../../services/entry.service';
 import {config} from './expense.config';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-expense',
@@ -139,6 +140,12 @@ export class ExpenseComponent implements OnInit {
     });
   }
 
+  payEntry( id ) {
+    this.entryService.payEntry( id ).subscribe(() => {
+      this.getEntries();
+    });
+  }
+
   editEntry( item: Entry ) {
     this.model = item;
   }
@@ -166,6 +173,8 @@ export class ExpenseComponent implements OnInit {
 
   get diagnostic() { return JSON.stringify(this.model); }
 
-
+  getDailyExpense(day: Date) {
+    return this.list.filter(l => moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do')).reduce((a, b) => a + b['value'], 0);
+  }
 
 }

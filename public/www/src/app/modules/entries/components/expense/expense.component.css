@@ -2,11 +2,6 @@
     color: #D54431;
 }
 
-.list-row {
-  /* border-bottom:1px solid #dcdcdc; */
-  /* padding: 5px 0px 5px 0px; */
-}
-
 .odd {
   background-color: #efefef;
 }
@@ -42,3 +37,21 @@
 .panel {
   padding: 0px;
 }
+
+.span-val {
+  display: block;
+    border-top: 1px solid #dedede;
+    text-align: right;
+    margin-top: 0.75em;
+}
+
+.span-date {
+  margin-top:10px;
+  display:block;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+

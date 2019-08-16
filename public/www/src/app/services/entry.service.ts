@@ -49,6 +49,10 @@ export class EntryService {
     return this.http.put<void>(this.url + 'expense/delete/'+id, id);
   }
 
+  payEntry( id: String): Observable<void> {
+    return this.http.put<void>(this.url + 'expense/pay/' + id, id);
+  }
+
   insertAccount(account:  BankAccount): Observable<BankAccount[]> {
     account.updatedOn = new Date();
     return this.http.post<BankAccount[]>(this.url + 'accounts', account, httpOptions);

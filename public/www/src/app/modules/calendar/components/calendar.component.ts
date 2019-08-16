@@ -133,9 +133,9 @@ export class CalendarComponent implements OnInit {
     list.sort((a, b) => a.date >= b.date ? 1 : -1 );
     if (lastBase[0]) {
       value = lastBase[0].value;
-      list = list.filter((a) => a.date >= lastBase[0].date && a.date <= current.date && !a.base );
+      list = list.filter((a) => a.date >= lastBase[0].date && a.date <= current.date && !a.base && !a.paid );
     } else {
-      list = list.filter((a) => a.date <= current.date);
+      list = list.filter((a) => a.date <= current.date && !a.paid);
     }
     /*
     if(!hasBase)
@@ -159,7 +159,7 @@ export class CalendarComponent implements OnInit {
       this.events = [];
 
       data.forEach(element => {
-
+        if (!element.paid) {
         this.events.push({
           start: new Date(element.date),
           title: element.category + ' / ' + (element.note ? element.note : '') + ' ' + element.value,
@@ -180,6 +180,7 @@ export class CalendarComponent implements OnInit {
         },
 
         );
+      }
       });
 
        console.log(this.events);
