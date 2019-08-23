@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
       }
     },
     title: {
-      text: 'Expenses'
+      text: 'Разходи (%)'
     },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
   },
     series: [
       {
-        name: 'Total',
+        name: 'Всичко',
         data: []
       }
     ]
@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
       }
    },
    title : {
-      text: 'Expenses in BGN'
+      text: 'Разходи в лв.'
    },
    tooltip: {
     pointFormat: '{point.name}: <b>{point.y:.1f} лв.</b>'
@@ -119,10 +119,10 @@ public lineOptions: any = {
       type: 'line'
   },
   title: {
-      text: 'Monthly Average Balance'
+      text: 'Месечен баланс'
   },
   subtitle: {
-      text: 'until the end of the month'
+      text: 'до края на месеца ' + moment().endOf('month').fromNow()
   },
   xAxis: {
     categories: {

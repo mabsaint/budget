@@ -22,6 +22,7 @@ export class ExpenseComponent implements OnInit {
   filteredCategories: Observable<ICategory[]>;
   filteredSubCategories: Observable<ICategory[]>;
   periods = config.periods;
+  nfilter = '';
 
   json = JSON;
 

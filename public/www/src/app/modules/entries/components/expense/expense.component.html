@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-12">
-    <h4>Expenses</h4>
+    <h4>Разходи до края на месеца</h4>
 
     <!-- <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
       <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>
@@ -12,7 +12,7 @@
     </div> -->
   </div>
   <div class="col-md-12 col-12">
-    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup">
+    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup" >
       <div class="form-group row">
         <!-- <select [(ngModel)]="model.category" name="category" class="form-control col-md-12" required>
           <option *ngFor='let k of categories' [value]="k.title">{{k.title}}</option>
@@ -90,7 +90,7 @@
     <div class="row">
         <div class="col-md-2 col-6"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
         <div class="col-md-8 col-6">
-          <input type='filter' [(ngModel)]='nfilter' />
+          <input type='filter' [(ngModel)]='nfilter' name="nfilter" />
         </div>
     </div>
     <div class="conent">
@@ -105,8 +105,8 @@
               <div class="panel panel-default">
                 <div class="panel-head">
                   <div class="row">
-                  <div class="col-md-8 col-8">{{i.category}}</div>
-                  <div class="col-md-4 col-4 text-right">
+                  <div class="col-md-6 col-4">{{i.category}}</div>
+                  <div class="col-md-6 col-8 text-right">
                     <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp;
                     <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
                     <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
@@ -130,7 +130,7 @@
   </div>
 
   <div class="col-12 row">
-      <div class="col-md-2 col-6"> <h4 class="red">{{total}} лв.</h4></div>
+      <div class="col-md-2 col-6"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
       <div class="col-md-8 col-6"></div>
   </div>
 </div>
