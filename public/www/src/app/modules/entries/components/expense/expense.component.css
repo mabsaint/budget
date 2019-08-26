@@ -26,7 +26,7 @@
 
 .panel-head {
   background-color: #efefef;
-  padding: 10px;
+  padding: 5px;
   font-weight: bold;
 }
 
@@ -42,7 +42,7 @@
   display: block;
     border-top: 1px solid #dedede;
     text-align: right;
-    margin-top: 0.75em;
+    margin-top: 0.85em;
 }
 
 .span-date {

@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit {
       value = lastBase[0].value;
       list = list.filter((a) => a.date >= lastBase[0].date && a.date <= current.date && !a.base && !a.paid );
     } else {
-      list = list.filter((a) => a.date <= current.date && !a.paid);
+      list = list.filter((a) => moment(a.date).startOf('day') <= moment(current.date).startOf('day') && !a.paid);
     }
     /*
     if(!hasBase)

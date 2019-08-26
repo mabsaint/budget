@@ -16,15 +16,15 @@ import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 export class AccountComponent implements OnInit {
 
-  account:BankAccount;
-  list:BankAccount[];
-  types:any = config.type;
-  constructor( private entryservice:EntryService ) { }
+  account: BankAccount;
+  list: BankAccount[];
+  types: any = config.type;
+  constructor( private entryservice: EntryService ) { }
 
   ngOnInit() {
     this.account = new BankAccount();
     this.entryservice.getAccounts().subscribe((data) => {
-      this.list = data;
+      this.list = data.sort( (a, b) => a.updatedOn <= b.updatedOn ? 1 : -1 );
     })
   }
 

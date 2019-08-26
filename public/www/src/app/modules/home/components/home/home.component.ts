@@ -53,15 +53,15 @@ export class HomeComponent implements OnInit {
     },
     plotOptions: {
       pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          depth: 35,
-          dataLabels: {
-              enabled: true,
-              format: '{point.name}'
-          }
+        allowPointSelect: true,
+        cursor: 'pointer',
+        depth: 35,
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}'
+        }
       }
-  },
+    },
     series: [
       {
         name: 'Всичко',
@@ -74,120 +74,160 @@ export class HomeComponent implements OnInit {
     chart: {
       type: 'column',
       options3d: {
-         enabled: false,
-         alpha: 15,
-         beta: 15,
-         depth: 50,
-         viewDistance: 25
+        enabled: false,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
       }
-   },
-   xAxis: {
+    },
+    xAxis: {
       labels: {
         enabled: false,
         formatter: function () {
           return this.value; // clean, unformatted number for year
         }
       }
-   },
-   title : {
+    },
+    title: {
       text: 'Разходи в лв.'
-   },
-   tooltip: {
-    pointFormat: '{point.name}: <b>{point.y:.1f} лв.</b>'
-  },
-   plotOptions : {
+    },
+    tooltip: {
+      pointFormat: '{point.name}: <b>{point.y:.1f} лв.</b>'
+    },
+    plotOptions: {
       cylinder: {
-         depth: 25
+        depth: 25
       },
       series: {
-         dataLabels: {
+        dataLabels: {
           enabled: true,
           inside: false,
           format: '{point.y}<br/>{point.name}'
         }
       }
-   },
-   series : [{
-    type: 'column',
-    name: 'Expenses',
-    data: []
-   }]
-};
+    },
+    series: [{
+      type: 'column',
+      name: 'Expenses',
+      data: []
+    }]
+  };
 
-public lineOptions: any = {
-  chart: {
+  public lineOptions: any = {
+    chart: {
       type: 'line'
-  },
-  title: {
+    },
+    title: {
       text: 'Месечен баланс'
-  },
-  subtitle: {
+    },
+    subtitle: {
       text: 'до края на месеца ' + moment().endOf('month').fromNow()
-  },
-  xAxis: {
-    categories: {
-      formatter: function () {
+    },
+    xAxis: {
+      categories: {
+        formatter: function () {
           return this.value; // clean, unformatted number for year
+        }
       }
-    }
-  },
-  yAxis: {
+    },
+    yAxis: {
       title: {
-          text: 'Money (BGN)'
+        text: 'Money (BGN)'
       }
-  },
-  plotOptions: {
+    },
+    plotOptions: {
       line: {
-          dataLabels: {
-              enabled: true,
-              formatter: function() {
-                return this.y;
-              }
-          },
-          enableMouseTracking: false
+        dataLabels: {
+          enabled: true,
+          formatter: function () {
+            return this.y;
+          }
+        },
+        enableMouseTracking: false
       }
-    //   area: {
-    //     pointStart: 1940,
-    //     marker: {
-    //         enabled: false,
-    //         symbol: 'circle',
-    //         radius: 2,
-    //         states: {
-    //             hover: {
-    //                 enabled: true
-    //             }
-    //         }
-    //     }
-    // }
-  },
-  series: [{
-      name: 'Available',
+      //   area: {
+      //     pointStart: 1940,
+      //     marker: {
+      //         enabled: false,
+      //         symbol: 'circle',
+      //         radius: 2,
+      //         states: {
+      //             hover: {
+      //                 enabled: true
+      //             }
+      //         }
+      //     }
+      // }
+    },
+    series: [{
+      name: 'Налични',
       data: [],
       color: '#80D499'
-  }, {
-      name: 'Expenses',
+    }, {
+      name: 'Разходи',
       data: [],
       color: '#FFC1B8'
-  }]
-};
+    }]
+  };
 
-private events: Array<any>;
+  public balanceOptions: any = {
+    chart: {
+      plotBackgroundColor: null,
+      plotBorderWidth: 0,
+      plotShadow: false
+    },
+    title: {
+      text: 'Баланс',
+      align: 'center',
+      verticalAlign: 'middle',
+      y: 60
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.y} ( {point.percentage:.1f}% )</b>'
+    },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: false,
+          distance: -50,
+          style: {
+            fontWeight: 'bold',
+            color: 'white'
+          }
+        },
+        startAngle: -90,
+        endAngle: 90,
+        center: ['50%', '75%'],
+        size: '110%',
+        colors: ['#80D499', '#FFC1B8', '#ccc']
+      }
+
+    },
+    series: [{
+      type: 'pie',
+      name: 'Баланс',
+      innerSize: '50%',
+      data: []
+    }]
+  };
+  private events: Array<any>;
   constructor(private entryService: EntryService) { }
 
   ngOnInit() {
     this.loadAccounts();
-    this.entryService.getGroupedExpenses().subscribe( data => {
+    this.entryService.getGroupedExpenses().subscribe(data => {
       console.log(data);
       const perc = [];
       let total = 0;
 
-      data.forEach( e => {
+      data.forEach(e => {
         e.name = e.name ? e.name : 'Other';
         total += e.y;
       });
 
-      data.forEach( e => {
-        perc.push({name: e.name ? e.name : 'Other', y: parseFloat( ( (e.y / total) * 100 ).toFixed(2) )});
+      data.forEach(e => {
+        perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
       });
       console.log(perc);
       this.options.series[0].data = perc;
@@ -198,44 +238,52 @@ private events: Array<any>;
     });
 
     // get all:
-      this.entryService.getAllEntries(true).subscribe((data: Array<any>) => {
-        this.events = [];
-        const totals = [];
-        const values = [];
-        const xaxis = [];
+    this.entryService.getAllFromDateEntries(moment().startOf('month').format('YYYY-MM-DD')).subscribe((data: Array<any>) => {
+      this.events = [];
+      const totals = [];
+      const values = [];
+      const xaxis = [];
+      const exp = data.filter(e => e.type === 'expense').reduce((t, e) => t - e.value, 0);
+      const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0);
 
-        data = data.filter( e => new Date(e.date) > new Date() && moment(e.date) <= moment().endOf('month'));
+      console.log(exp);
+      console.log(data.filter(e => e.type === 'income'));
+      data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
 
-        data.forEach(element => {
+      data.forEach(element => {
 
-          const el = this.events.find(e => e.start === new Date(element.date).getDate());
-          if (el) {
-            el.value +=  element.value < 0 ? element.value * (-1) : element.value;
-            el.total = this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)));
-            el.datestr = element.date;
-          } else {
+        const el = this.events.find(e => e.start === moment(element.date).startOf('day').format('YYYY-MM-DD'));
+        if (el) {
+          el.value += element.value < 0 ? element.value * (-1) : 0;
+          el.total = this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)));
+          //  el.datestr =  element.date.substr(0, 19);
+        } else {
           this.events.push({
-            start: new Date(element.date).getDate(),
-            datestr: element.date,
+            start: moment(element.date).startOf('day').format('YYYY-MM-DD'),
+            datestr: moment(element.date).startOf('day'),
             value: element.value < 0 ? element.value * (-1) : 0,
             total: this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)))
           });
         }
-        });
-        this.events = this.events.sort( (a, b) => a.start > b.start ? 1 : -1 );
-        this.events.forEach( (e) => {
-          values.push( e.value );
-          totals.push( e.total );
-          xaxis.push(moment(e.datestr).format('Do MMM'));
-        });
-
-        this.lineOptions.series[0].data = totals;
-        this.lineOptions.series[1].data = values;
-        this.lineOptions.xAxis.categories = xaxis;
-        // this.lineOptions.plotOptions.area.pointStart = xaxis[0];
-        Highcharts.chart('line', this.lineOptions); // .setSize(300, 200);
-         console.log(this.events);
       });
+      const remains = this.events[this.events.length - 1].total;
+      this.events = this.events.sort((a, b) => a.start >= b.start ? 1 : -1);
+      this.events.forEach((e) => {
+        values.push(e.value);
+        totals.push(e.total);
+        xaxis.push(moment(e.datestr).format('Do MMM'));
+      });
+
+      this.lineOptions.series[0].data = totals;
+      this.lineOptions.series[1].data = values;
+      this.lineOptions.xAxis.categories = xaxis;
+      // this.lineOptions.plotOptions.area.pointStart = xaxis[0];
+      Highcharts.chart('line', this.lineOptions); // .setSize(300, 200);
+
+      this.balanceOptions.series[0].data = [['Приходи', inc], ['Разходи', exp], ['Рзлика', (inc - (exp + remains))]];
+      Highcharts.chart('balance', this.balanceOptions);
+      console.log(this.events);
+    });
 
 
   }
@@ -246,36 +294,26 @@ private events: Array<any>;
     });
   }
 
+  getRemains(current: Entry, list: Entry[]): number {
+    return this.available + list.filter( t => t.moment < current.moment).reduce((a, b) => a + b.value, 0);
+  }
+
   getTotalTillCurrent(current: Entry, list: Entry[]) {
-    let value = this.available;
+    let value = this.getRemains(current, list);
+    let inclist: number;
 
-    const hasBase = list.find((e) => {
-      return (e.date === current.date) && e.base;
-    });
-    const lastBase = list.sort( (a, b) => a.date >= b.date ? -1 : 1).filter(e => e.base && e.date <= current.date);
-    // console.log(lastBase[0]);
+    list.forEach(a => a.moment = moment(a.date).startOf('day'));
+    list.sort((a, b) => a.moment >= b.moment ? 1 : -1);
+    current.moment = moment(current.date).startOf('day');
 
-    list.sort((a, b) => a.date >= b.date ? 1 : -1 );
-    if (lastBase[0]) {
-      value = lastBase[0].value;
-      list = list.filter((a) => a.date >= lastBase[0].date && a.date <= current.date && !a.base );
-    } else {
-      list = list.filter((a) => a.date < current.date);
-    }
-    /*
-    if(!hasBase)
-      list = list.filter((a) => { return (a.date <= current.date)  });
-    else
-      list = list.filter((a) => { return a.date == current.date && !a.base });
-*/
-    // console.log(current.date + ":" + hasBase)
-    // console.log(list);
+    value = this.getRemains(current, list);
+    inclist = value + list.filter((a) =>
+                                        (a.moment.format('YYYYMMDD') === current.moment.format('YYYYMMDD')) &&
+                                        !a.paid && a.type === 'income'
+                                  ).reduce((a, b) => a + b.value, 0);;
 
-    for (let i = 0; i < list.length; i++) {
-      value += list[i].value;
-    }
-   // console.log(value);
-    return value;
+    return inclist;
+
   }
 
 }
