@@ -48,6 +48,10 @@ export class EntryService {
       }
   }
 
+  getAllFromDateEntries(start: string): Observable<Array<Entry>> {
+      return this.http.get<Array<Entry>>(this.url + 'all/' + (new Date(start).toISOString().substr(0, 10)));
+  }
+
   deleteEntry( id: String): Observable<void> {
     return this.http.put<void>(this.url + 'expense/delete/' + id, id);
   }

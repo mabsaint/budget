@@ -30,16 +30,16 @@ export class IncomeComponent implements OnInit {
     return ans;
   }
 
-  get subcategories() : string[] {
-    var currentcat:{title:string,subcategories:string[]} = this.categories.find((a)=>{return a.title == this.model.category});
+  get subcategories(): string[] {
+    var currentcat: {title: string, subcategories:string[]} = this.categories.find((a)=>{return a.title == this.model.category});
     return currentcat ? currentcat.subcategories : ['a','b'];
   }
 
   constructor( private entryService: EntryService) {
-    this.JSON = this.categories.find((a)=>{return a.title == 'Жилище'});
+    this.JSON = this.categories.find((a) =>  a.title === 'Жилище');
    }
 
-  onSubmit(){
+  onSubmit() {
     this.submitted = true;
     // Put changes ....
     this.model.type = 'income';

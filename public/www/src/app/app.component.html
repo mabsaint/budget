@@ -3,14 +3,14 @@
     <!-- <div class="row navbar navbar-app navbar-absolute-top topnav" *ngIf="nav.visible" id="myTopnav"> -->
     <div class="topnav" *ngIf="nav.visible" id="myTopnav">
       <a routerLink="/" class="nav-link" routerLinkActive='' >Начало</a>
-      <a routerLink="/accounts" class="nav-link" routerLinkActive='active' >Наличности</a>
-      <a routerLink="/expenses" class="nav-link" routerLinkActive='active' >Разходи</a>
-      <a routerLink="/incomes" class="nav-link" routerLinkActive='active' >Приходи</a>
-      <a routerLink="/calendar" class="nav-link" routerLinkActive='active' >Календар</a>
-      <a routerLink="/logout" class="nav-link" routerLinkActive='active' >Изход</a>
+      <a routerLink="/accounts" class="nav-link" onclick="myFunction()" routerLinkActive='active' >Наличности</a>
+      <a routerLink="/expenses" class="nav-link" onclick="myFunction()" routerLinkActive='active' >Разходи</a>
+      <a routerLink="/incomes" class="nav-link" onclick="myFunction()" routerLinkActive='active' >Приходи</a>
+      <a routerLink="/calendar" class="nav-link" onclick="myFunction()" routerLinkActive='active' >Календар</a>
+      <a routerLink="/logout" class="nav-link"  routerLinkActive='active' >Изход</a>
       <a href="javascript:void(0);" class="icon" onclick="myFunction()" id="hamb">
           <i class="fa fa-bars"></i>
-        </a>
+      </a>
     <!-- <ul class="nav nav-pills">
         <li class="nav-item">
             <a routerLink="/" class="nav-link" routerLinkActive='' >Home</a>

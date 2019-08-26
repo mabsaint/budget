@@ -169,7 +169,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   getDate(date: Date) {
-    return new Date(date).getDate();
+    return moment(date).startOf('day').format('DD-MM-YYYY');
   }
 
   get diagnostic() { return JSON.stringify(this.model); }

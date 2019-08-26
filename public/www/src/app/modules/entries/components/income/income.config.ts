@@ -10,12 +10,16 @@ export var config = {
         },{
             "title":"Заем",
             "subcategories":[]
-        },{"title":"Налични", "subcategories":[]}
+        },{"title":"Налични", "subcategories":[]},
+        {
+          "title":"Странични",
+          "subcategories":[]
+      }
     ],
     "periods": [
         {'key':'', 'value': '-- none --'},
-        {'key':'daily','value':'на ден'}, 
-        {'key':'weekly','value':'на седмица'}, 
+        {'key':'daily','value':'на ден'},
+        {'key':'weekly','value':'на седмица'},
         {'key':'monthly','value':'на месец'}
     ]
 }

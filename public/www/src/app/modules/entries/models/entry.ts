@@ -11,6 +11,7 @@ export class Entry {
     public type: string;
     public base = false;
     public paid?: boolean;
+    public moment?: any;
     constructor(type: string = 'expense') { this.type = type; }
 }
 
