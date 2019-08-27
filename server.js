@@ -101,6 +101,14 @@ app.route('/expense/delete/:guid')
             })
 });
 
+app.route('/expense/pay/:id')
+    .put(function(req, res){
+        mongoservice.payEntry(req.params.id)
+        .then(function(result) {
+            res.send(result);
+        })
+    });
+
 app.route('/income')
     .get(function (req, res) {
         mongoservice.getIncomeEntries()
@@ -168,16 +176,6 @@ app.route('/all/:start')
             res.send(result);
         })
     })
-
-app.route('/allmonth')
-    .get(function(req, res){
-        mongoservice.getAllThisMonth()
-        .then(function (result) {
-           // var ans = result.reduce((a,b) => a + b['value'], 0)
-            res.send(result);
-        })
-    })
-
 /** Accounts */
 app.route('/accounts')
     .get(function(req, res){
@@ -198,6 +196,7 @@ app.route('/accounts')
     .get(function(req, res){
         mongoservice.getExpenseCategories()
         .then(function(data){
+            data.forEach(a => a.title = a._id);
             res.send(data)
         })
     })

@@ -23,6 +23,7 @@ export class ExpenseComponent implements OnInit {
   filteredSubCategories: Observable<ICategory[]>;
   periods = config.periods;
   nfilter = '';
+  showForm = false;
 
   json = JSON;
 
@@ -162,7 +163,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   setInterval(data: Date[]) {
-   this._from = data[0];
+   this._from = moment(data[0]).startOf('day').toDate();
    this._to = data[1];
 
    this.getEntries();
@@ -176,6 +177,10 @@ export class ExpenseComponent implements OnInit {
 
   getDailyExpense(day: Date) {
     return this.list.filter(l => moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do')).reduce((a, b) => a + b['value'], 0);
+  }
+
+  toggleForm(event) {
+    this.showForm = !this.showForm;
   }
 
 }

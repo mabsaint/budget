@@ -30,7 +30,7 @@ export class AccountComponent implements OnInit {
 
   onSubmit() {
     this.entryservice.insertAccount(this.account).subscribe((data) => {
-    this.list = data;
+    this.list = data.sort( (a, b) => a.updatedOn <= b.updatedOn ? 1 : -1 );
     this.account = new BankAccount();
     })
   }

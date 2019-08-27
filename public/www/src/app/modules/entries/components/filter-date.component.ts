@@ -5,10 +5,10 @@ import { TouchSequence } from 'selenium-webdriver';
     selector: 'filter-date',
     template: `
     Period: {{startdate | date:'dd MMM, yyyy'}} - {{enddate | date:'dd MMM, yyyy'}}<br />
-    <input matInput [matDatepicker]="startpicker" placeholder="Choose a start date" [(ngModel)]="startdate" name="startdate"  >
+    <input matInput [matDatepicker]="startpicker" placeholder="Choose a start date" [(ngModel)]="startdate" name="startdate" class="col-4" >
     <mat-datepicker-toggle matSuffix [for]="startpicker" ></mat-datepicker-toggle>
     <mat-datepicker #startpicker ></mat-datepicker> -
-    <input matInput [matDatepicker]="endpicker" placeholder="Choose an end date" [(ngModel)]="enddate" name="enddate"  >
+    <input matInput [matDatepicker]="endpicker" placeholder="Choose an end date" [(ngModel)]="enddate" name="enddate" class="col-4" >
     <mat-datepicker-toggle matSuffix [for]="endpicker" ></mat-datepicker-toggle>
     <mat-datepicker #endpicker ></mat-datepicker>
     <hr />

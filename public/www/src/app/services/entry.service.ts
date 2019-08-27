@@ -6,6 +6,8 @@ import { Entry } from '../modules/entries/models/entry';
 import { Observable } from 'rxjs';
 import { BankAccount } from '../modules/account/account.model';
 
+import * as moment from 'moment';
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -29,10 +31,12 @@ export class EntryService {
   }
 
   getEntries(from: Date = null, to: Date = null): Observable<Array<Entry>> {
-    console.log(from.toISOString().substr(0, 10));
+    console.log(moment(from).startOf('day').format('YYYY-MM-DD'));
     // tslint:disable-next-line:max-line-length
     // return this.http.get<Array<Entry>>(this.url + 'expense/grouped/' + from.toISOString().substr(0,10) + '/' + to.toISOString().substr(0,10));
-    return this.http.get<Array<Entry>>(this.url + 'expense/' + from.toISOString().substr(0, 10) + '/' + to.toISOString().substr(0, 10));
+    const strfrom = moment(from).startOf('day').format('YYYY-MM-DD');
+    const strto = moment(to).startOf('day').format('YYYY-MM-DD');
+    return this.http.get<Array<Entry>>(this.url + 'expense/' + strfrom + '/' + strto);
   }
 
   getIncomeEntries(from: Date = null, to: Date = null): Observable<Array<Entry>> {
