@@ -13,8 +13,8 @@ const CALENDAR_FILTER = {
     type: 'expense'
 };
 
-// const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@127.0.0.1:27017/budget'
- const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
+const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@127.0.0.1:27017/budget'
+// const MONGO_CONNECTION = 'mongodb://budgetdbuser:BudgeT123456@172.104.134.218:27017/budget'
 //var db = mongojs("mongodb://dbuser:dbuser123456@ds063178.mlab.com:63178/mongo_dpdev", [collectionName]);
 var db = mongojs(MONGO_CONNECTION, [collectionName]);
 
@@ -30,25 +30,43 @@ module.exports = {
             return null;
         } else {
             item.guid = uuid();
+            item.value = parseFloat(item.value);
+
             return new Promise(function (resolve, reject) {
                 //Insert category
-                db.categories.find({'title':item.category}, function(err, result){
-                    if(result.length == 0 /* new category */) {
-                        db.categories.save({'title':item.category, 'subcategories':[{'title':item.subcategory}]},function(err, result){})
+                db.categories.find({
+                    'title': item.category
+                }, function (err, result) {
+                    if (result.length == 0 /* new category */ ) {
+                        db.categories.save({
+                            'title': item.category,
+                            'subcategories': [{
+                                'title': item.subcategory
+                            }]
+                        }, function (err, result) {})
                     } else {
                         // check subcategry
-                        var hassubcategory = result[0].subcategories.filter(a=>a.title==item.subcategory).length;
-                        if(hassubcategory == 0) {
-                            result[0].subcategories.push({'title':item.subcategory});
-                            db.categories.update({'title':item.category}, result[0], function(){});
+                        var hassubcategory = result[0].subcategories.filter(a => a.title == item.subcategory).length;
+                        if (hassubcategory == 0) {
+                            result[0].subcategories.push({
+                                'title': item.subcategory
+                            });
+                            db.categories.update({
+                                'title': item.category
+                            }, result[0], function () {});
                         }
                     }
                 });
+
+                // insert entry
+                var offset = new Date().getTimezoneOffset();
                 if (item.period && item.date && item.enddate) {
                     var toInsert = [];
+                    var date1 = new Date( new Date(item.date).valueOf() - offset * 60000 ); // the offset is negative value
+                    var date2 =new Date( new Date(item.enddate).valueOf() - offset * 60000 ); // the offset is negative value
+
                     if (item.period == 'daily') { // Daily:
-                        var date1 = new Date(item.date);
-                        var date2 = new Date(item.enddate);
+                      
 
                         console.log(date.subtract(date2, date1).toDays());
                         var delta = date.subtract(date2, date1).toDays() + 1;
@@ -71,8 +89,8 @@ module.exports = {
 
 
                     } else if (item.period == 'weekly') { //weekly
-                        var date1 = new Date(item.date);
-                        var date2 = new Date(item.enddate);
+                        // var date1 = new Date(item.date);
+                        // var date2 = new Date(item.enddate);
 
                         console.log(date.subtract(date2, date1).toDays());
                         var delta = date.subtract(date2, date1).toDays() + 1;
@@ -92,8 +110,8 @@ module.exports = {
                         console.log(JSON.stringify(toInsert));
 
                     } else if (item.period == 'monthly') { //monthly
-                        var date1 = new Date(item.date);
-                        var date2 = new Date(item.enddate);
+                        // var date1 = new Date(item.date);
+                        // var date2 = new Date(item.enddate);
                         //var delta  = date.subtract(date2, date1).getMonth();
                         while (date1 < date2) {
                             let tmp = JSON.parse(JSON.stringify(item));
@@ -120,8 +138,9 @@ module.exports = {
                             }
                         })
                     });
-                } else {
-                    item.date = new Date(item.date)
+                } else { // single period
+                   
+                    item.date = new Date( new Date(item.date).valueOf() - offset * 60000 ); // the offset is negative value
                     db.entries.save(item, function (err, result) {
                         if (err) {
                             reject(err);
@@ -145,37 +164,19 @@ module.exports = {
             if (start) {
                 var offset = new Date().getTimezoneOffset();
                 offset = -3;
-                var t = Date.parse(start) + (offset * 60*60*1000);
+                var t = Date.parse(start) + (offset * 60 * 60 * 1000);
                 start = new Date(t);
-                filter.date = { $gte: new Date(start) };
+                filter.date = {
+                    $gte: new Date(start)
+                };
             }
             console.log(filter);
-            db[collectionName].find(filter).sort({ date: 1 }, function (err, result) {
-                let ans = result.sort((a, b) => { a.date > b.date ? 1 : -1 });
-                resolve(ans);
-            });
-        });
-    },
-
-    /**
-     * Retrieves all entries based on started date     * 
-     * @param  {} start=null
-     */
-    getAllThisMonth: function () {
-        return new Promise(function (resolve, reject) {
-            var filter = {};
-           
-                var offset = new Date().getTimezoneOffset();
-                offset = -3;
-                var today = new Date();
-                var t1 = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0);
-                var t2 = new Date(today.getFullYear(), today.getMonth()+1, 1, 0, 0, 0);
-                
-                filter.date = { $gte: t1, $lt: t2 };
-           
-            console.log(filter);
-            db[collectionName].find(filter).sort({ date: 1 }, function (err, result) {
-                let ans = result.sort((a, b) => { a.date > b.date ? 1 : -1 });
+            db[collectionName].find(filter).sort({
+                date: 1
+            }, function (err, result) {
+                let ans = result.sort((a, b) => {
+                    a.date > b.date ? 1 : -1
+                });
                 resolve(ans);
             });
         });
@@ -186,7 +187,7 @@ module.exports = {
         if (start) {
             var offset = new Date().getTimezoneOffset();
             offset = -3;
-            var t = Date.parse(start) + (offset *  60*60*1000);
+            var t = Date.parse(start) + (offset * 60 * 60 * 1000);
             start = new Date(t);
             console.log(start);
         } else
@@ -215,7 +216,7 @@ module.exports = {
         if (start) {
             var offset = new Date().getTimezoneOffset();
             offset = -3;
-            var t = Date.parse(start) + (offset * 60*60*1000);
+            var t = Date.parse(start) + (offset * 60 * 60 * 1000);
             start = new Date(t);
             console.log(start);
         } else
@@ -239,7 +240,7 @@ module.exports = {
         if (start) {
             var offset = new Date().getTimezoneOffset();
             offset = -3;
-            var t = Date.parse(start) + (offset * 60*60*1000);
+            var t = Date.parse(start) + (offset * 60 * 60 * 1000);
             start = new Date(t);
             console.log(start);
         } else
@@ -254,13 +255,19 @@ module.exports = {
 
         return new Promise(function (resolve, reject) {
             var group = {
-                key: { category: 1, guid: 1, type: 1 },
+                key: {
+                    category: 1,
+                    guid: 1,
+                    type: 1
+                },
                 cond: filterObject,
                 reduce: function (curr, result) {
                     result.total += curr.value
                     result.date = curr.date
                 },
-                initial: { total: 0 },
+                initial: {
+                    total: 0
+                },
                 finalize: function (result) {
                     result.value = result.total
                 }
@@ -274,7 +281,9 @@ module.exports = {
 
     deleteEntry: function (id) {
         return new Promise(function (resolve, reject) {
-            db[collectionName].remove({ "_id": db.ObjectId(id) }, function (err, result) {
+            db[collectionName].remove({
+                "_id": db.ObjectId(id)
+            }, function (err, result) {
                 if (err) {
                     reject(err);
                 } else {
@@ -286,7 +295,9 @@ module.exports = {
 
     deleteEntryByGUID: function (guid) {
         return new Promise(function (resolve, reject) {
-            db[collectionName].remove({ "guid": guid }, function (err, result) {
+            db[collectionName].remove({
+                "guid": guid
+            }, function (err, result) {
                 if (err) {
                     reject(err);
                 } else {
@@ -340,13 +351,18 @@ module.exports = {
 
         return new Promise(function (resolve, reject) {
             var group = {
-                key: { category: 1, guid: 1 },
+                key: {
+                    category: 1,
+                    guid: 1
+                },
                 cond: filterObject,
                 reduce: function (curr, result) {
                     result.total += curr.value
                     result.date = curr.date
                 },
-                initial: { total: 0 },
+                initial: {
+                    total: 0
+                },
                 finalize: function (result) {
                     result.value = result.total
                 }
@@ -371,10 +387,12 @@ module.exports = {
     newAccount: function (item) {
         return new Promise(function (resolve, reject) {
             let tmp = JSON.parse(JSON.stringify(item));
-            if(item._id) {
+            if (item._id) {
                 let id = item._id;
                 delete item._id;
-                db.accounts.update({ "_id": db.ObjectId(id) }, item,{},function (error, data) {
+                db.accounts.update({
+                    "_id": db.ObjectId(id)
+                }, item, {}, function (error, data) {
                     if (error) reject(error);
                     else {
                         db.accounts.find({}, function (error, data) {
@@ -394,19 +412,28 @@ module.exports = {
                     }
                 })
             }
-           
+
         })
     },
 
     getExpenseCategories: function () {
         return new Promise(function (resolve, reject) {
-            db.categories.find({}, (error, data) => {
-                if (error) reject(error);
-                else resolve(data);
-            })
+            // db.categories.find({}, (error, data) => {
+            //     if (error) reject(error);
+            //     else resolve(data);
+            // })
+            db.entries.aggregate([
+                {$match:{
+                    'type':'expense'
+                    }
+                },
+                {$group:{_id:'$category'}}], (error, data) => {
+                    if (error) reject(error);
+                    else resolve(data);
+                })
         });
     },
-    
+
     updateAccount: function (item) {
 
     },
@@ -415,12 +442,36 @@ module.exports = {
 
     },
 
-    groupedByCategory: function ( start = null, end = null) {
+    payEntry: function (id) {
+        return new Promise(function (resolve, reject) {
+            db.entries.findOne({
+                "_id": db.ObjectId(id)
+            }, function (err, item) {
+                console.log(item);
+                // resolve(item)
+
+                // var temp = JSON.parse(JSON.stringify(item));
+                //  delete item._id;
+                item.paid = item.paid ? false : true;
+                db.entries.update({
+                    "_id": db.ObjectId(id)
+                }, item, {}, function (error, data) {
+                    if (error) reject(error);
+                    else {
+                        resolve(item);
+                    }
+                });
+
+            })
+        })
+    },
+
+    groupedByCategory: function (start = null, end = null) {
         var query = "db.entries.aggregate([{ \
                 $match:{\
                     date:" + {
-                        "$gte":  new Date() 
-                    } + "\
+            "$gte": new Date()
+        } + "\
                 }\
             },\
             {\
@@ -430,33 +481,54 @@ module.exports = {
         }])";
         var startDate = new Date()
         if (!start) {
-            startDate = new Date( startDate.getFullYear(), startDate.getMonth(), 1);
+            startDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
         } else {
-            startDate = new Date( start );
+            startDate = new Date(start);
+        }
+
+        var endDate = new Date()
+        if (!end) {
+            if (endDate.getMonth() < 12) {
+                endDate = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+            } else {
+                endDate = new Date(endDate.getFullYear() + 1, 1, 1);
+            }
+
+        } else {
+            endDate = new Date(end);
         }
         return new Promise(function (resolve, reject) {
-            
-            db.entries.aggregate([{ 
-                $match:{ 
-                    type:'expense', 
-                    date:{ $gte: startDate } 
-                }}, 
-                { $group:{
-                    _id:'$category', 
-                    total:{$sum:'$value'
-                }}
-            }], (error, data) => {
+
+            db.entries.aggregate([{
+                    $match: {
+                        type: 'expense',
+                        date: {
+                            $gte: startDate,
+                            $lt: endDate
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$category',
+                        total: {
+                            $sum: '$value'
+                        }
+                    }
+                }
+            ], (error, data) => {
                 if (error) reject(error);
                 else resolve(data);
             })
-            
+
         });
     },
 
-    getLoginInfo: function ()
-    {
-        return new Promise( function(resolve, reject) {
-            db.user.findOne({'type':'admin'}, function(error, data) {
+    getLoginInfo: function () {
+        return new Promise(function (resolve, reject) {
+            db.user.findOne({
+                'type': 'admin'
+            }, function (error, data) {
                 if (error) {
                     reject(error);
                 } else {

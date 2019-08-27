@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-12">
-    <h4>Разходи до края на месеца</h4>
+    <h4>Разходи до края на месеца <i [ngClass]="{'fa':true, 'fa-plus-square':!showForm, 'fa-minus-square':showForm}" (click)="toggleForm($event)"></i></h4>
 
     <!-- <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
       <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>
@@ -12,13 +12,13 @@
     </div> -->
   </div>
   <div class="col-md-12 col-12">
-    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup" >
+    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f [formGroup] = "myGroup" *ngIf="showForm" >
       <div class="form-group row">
         <!-- <select [(ngModel)]="model.category" name="category" class="form-control col-md-12" required>
           <option *ngFor='let k of categories' [value]="k.title">{{k.title}}</option>
         </select> -->
         <input type="text" matInput [formControl]="catControl" name="category" class="form-control col-md-3"
-          [matAutocomplete]='auto' (focus)='onFocus($event)' catControl='model.category' placeholder="Category" [(ngModel)]="model.category">
+          [matAutocomplete]='auto' (focus)='onFocus($event)' catControl='model.category' placeholder="Категория" [(ngModel)]="model.category">
 
         <mat-autocomplete #auto='matAutocomplete'>
           <mat-option *ngFor="let category of filteredCategories | async" [value]='category.title'>
@@ -27,17 +27,18 @@
         </mat-autocomplete>
         <input placeholder='0.00' type="text" class="form-control col-md-1" name="value" [(ngModel)]="model.value" [ngModelOptions]="{standalone: true}"
         required />
-        <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="model.date" [ngModelOptions]="{standalone: true}" name="date" class="form-control col-md-2"
+        <input matInput [matDatepicker]="picker" placeholder="Дата" [(ngModel)]="model.date" [ngModelOptions]="{standalone: true}" name="date" class="form-control col-md-2 col-4"
         required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <select name="period" id="" class="form-control col-md-2" [(ngModel)]="model.period" [ngModelOptions]="{standalone: true}" >
-          <option *ngFor="let i of periods" [value]="i.key">{{i.value}}</option>
-        </select>
-        <input matInput [matDatepicker]="endpicker" class="form-control col-md-2" placeholder="Choose a date" [(ngModel)]="model.enddate" [ngModelOptions]="{standalone: true}" name="enddate"
+        <input matInput [matDatepicker]="endpicker" class="form-control col-md-2 col-4" placeholder="Крайна дата" [(ngModel)]="model.enddate" [ngModelOptions]="{standalone: true}" name="enddate"
         [hidden]='!model.period' >
       <mat-datepicker-toggle matSuffix [for]="endpicker" [hidden]='!model.period'></mat-datepicker-toggle>
       <mat-datepicker #endpicker [hidden]='!model.period'></mat-datepicker>
+        <select name="period" id="" class="form-control col-md-12 col-12" [(ngModel)]="model.period" [ngModelOptions]="{standalone: true}" placeholder="Период">
+          <option *ngFor="let i of periods" [value]="i.key">{{i.value}}</option>
+        </select>
+
 
       </div>
       <!-- <div class="form-group row">
@@ -56,7 +57,7 @@
       </div> -->
       <div class="form-group row">
         <!-- <label for="" class="col-md-12">Note</label> -->
-        <textarea type="text" class="form-control form-control-lg" [(ngModel)]="model.note" [ngModelOptions]="{standalone: true}" name="note" placeholder='Note'></textarea>
+        <textarea type="text" class="form-control form-control-lg" [(ngModel)]="model.note" [ngModelOptions]="{standalone: true}" name="note" placeholder='Бележка'></textarea>
       </div>
       <!-- <div class="form-group row">
         <label for="" class="col-md-9">Value</label>
@@ -88,25 +89,48 @@
     </form>
     <filter-date (changed)='setInterval($event)'></filter-date>
     <div class="row">
-        <div class="col-md-2 col-6"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
-        <div class="col-md-8 col-6">
+
+        <div class="col-md-6 col-6">
           <input type='filter' [(ngModel)]='nfilter' name="nfilter" />
         </div>
+        <div class="col-md-6 col-6 text-right"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
     </div>
     <div class="conent">
-        <div class="row list-row" *ngFor="let i of list | filter:nfilter; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'">
+        <!-- <div class="row list-row" *ngFor="let i of list | filter:nfilter; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'"> -->
 
 
-          <div class="col-md-2 col-3 left text-right"><span  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))" class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}}
-            <span class='span-val red'>{{getDailyExpense(i.date)}} лв.</span></span>
+          <!-- <div class="col-md-2 col-3 left text-right"><span  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))" class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}} -->
+          <div class="row" *ngFor="let i of list | filter:nfilter; let x = index;">
+          <div [ngClass]="{'col-md-12':(x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date)))}"  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))">
+            <div class="panel panel-default">
+              <div class="panel-head text-left">
+                  <span  class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}}
+                    </span>
+                    <span class='red span-val'>{{getDailyExpense(i.date)}} лв.</span>
+              </div>
+            </div>
           </div>
-            <div class="col-md-6 col-9 right">
+          <div class="col-md-4 col-4 left text-right">
+              <span class="red" [ngClass]="i.paid ? 'strike' : ''">{{i.value}} лв.</span>
+          </div>
+          <div class="col-md-4 col-4 text-left">
+
+                    {{i.category}}<span *ngIf='i.note'>- {{i.note}}</span>
+
+          </div>
+          <div class="col-md-4 col-4 text-right">
+              <!-- <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp; -->
+              <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
+              <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
+          </div>
+        </div>
+            <!-- <div class="col-md-6 col-9 right">
               <div class="panel panel-default">
                 <div class="panel-head">
                   <div class="row">
                   <div class="col-md-6 col-4">{{i.category}}</div>
                   <div class="col-md-6 col-8 text-right">
-                    <!-- <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp; -->
+                    <!-- <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp; -- >
                     <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
                     <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
                   </div>
@@ -117,19 +141,20 @@
                   <span class="red"><strong [ngClass]="i.paid ? 'strike' : ''" >{{i.value}} лв.</strong></span>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4"></div>
+            </div> -->
+            <!-- <div class="col-md-4"></div> -->
             <!-- <div class="col-md-2 col-2" >{{i.category}}</div>
             <div class="col-md-4 col-4" >{{i.note}}</div>
             <div class="col-md-2 col-3">{{i.value}} лв.</div>
             <div class="col-md-1 col-1"><span (click)="editEntry(i)" class=""><i class="fa fa-edit"></i></span></div>
             <div class="col-md-1 col-1"><span (click)="deleteEntry(i._id)" class=""><i class="fa fa-remove red"></i></span></div> -->
-        </div>
+        <!-- </div> -->
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-6"> </div>
+        <div class="col-md-6 col-6"><h4 class="red text-right">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
     </div>
   </div>
 
-  <div class="col-12 row">
-      <div class="col-md-2 col-6"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
-      <div class="col-md-8 col-6"></div>
-  </div>
+
 </div>

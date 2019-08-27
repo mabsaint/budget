@@ -1,5 +1,6 @@
 .red {
-    color: #D54431;
+    /* color: #D54431; */
+    color: #EF746F;
 }
 
 .odd {
@@ -39,15 +40,14 @@
 }
 
 .span-val {
-  display: block;
-    border-top: 1px solid #dedede;
+    float:right;
     text-align: right;
-    margin-top: 0.85em;
 }
 
 .span-date {
-  margin-top:10px;
-  display:block;
+  margin: 0px;
+  display: inline-block;
+  color: #8c8c8c;
 }
 
 .strike {

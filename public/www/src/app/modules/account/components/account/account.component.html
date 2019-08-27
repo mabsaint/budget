@@ -2,10 +2,10 @@
   <div class="col-md-12">
     <h4>Наличности</h4>
 
-    <div class="row item list-row" *ngFor="let i of list">
+    <div class="row item list-row" *ngFor="let i of list | sort:'type'">
       <div class="col-md-2 col-12 head">{{i.updatedOn | date:'dd MMM'}}</div>
-      <div class="col-md-2 col-3">{{i.type}}</div>
-      <div class="col-md-2 col-3"><i class="fa {{i.fa}}" ></i>{{i.note}}</div>
+      <div class="col-md-2 col-3"><i class="fa {{i.fa}}" ></i>&nbsp;{{i.type}}</div>
+      <div class="col-md-2 col-3">{{i.note}}</div>
       <div class="col-md-2 col-3 red">{{i.value}} лв.</div>
       <div class="col-md-1 col-1"><span (click)="editAccount(i)" class="" ><i class="fa fa-edit"></i></span></div>
       <div class="col-md-1 col-1"><span (click)="deleteAccount(i.guid)" class="" ><i class="fa fa-remove red"></i></span></div>
