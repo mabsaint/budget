@@ -4,7 +4,13 @@
     <div class="col-md-12"><div id="line"></div></div>
     <div class="col-md-6"><div id="pie"></div></div>
     <div class="col-md-6"><div id="cylinder"></div></div>
-    <div class="col-md-12"><div id="balance"></div></div>
+    <div class="col-md-6 col-12">
+      <div class="row tr" *ngFor="let i of expenses | rsort:'y'">
+          <div class="col-md-8 col-8 td">{{i.name}}</div>
+          <div class="col-md-4 col-4 td">{{i.y}}</div>
+      </div>
+    </div>
+    <div class="col-md-6"><div id="balance"></div></div>
   </div>
 <script>
 </script>

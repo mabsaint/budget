@@ -52,8 +52,12 @@ export class EntryService {
       }
   }
 
-  getAllFromDateEntries(start: string): Observable<Array<Entry>> {
-      return this.http.get<Array<Entry>>(this.url + 'all/' + (new Date(start).toISOString().substr(0, 10)));
+  getAllFromDateEntries(start: string, end?: string): Observable<Array<Entry>> {
+    let uri = (new Date(start).toISOString().substr(0, 10));
+    if (end) {
+      uri += '/' + (new Date(end).toISOString().substr(0, 10));
+    }
+      return this.http.get<Array<Entry>>(this.url + 'all/' + uri);
   }
 
   deleteEntry( id: String): Observable<void> {
@@ -77,8 +81,26 @@ export class EntryService {
     return this.http.get<any[]>(this.url + 'categories');
   }
 
-  getGroupedExpenses(): Observable<any[]> {
-    return this.http.get<any[]>(this.url + 'grouped');
+  getGroupedExpenses(start?: Date, end?: Date): Observable<any[]> {
+    let uri = 'grouped';
+    if (start) {
+      const arg1 = moment(start).format('YYYY-MM-DD');
+      uri += '/' + arg1;
+    }
+
+    if (end) {
+      const arg2 = moment(end).format('YYYY-MM-DD');
+      uri += '/' + arg2;
+    }
+    return this.http.get<any[]>(this.url + uri);
+  }
+
+  doSnapshot(events: any[]): Observable<any> {
+    return this.http.post(this.url + 'snapshot', events);
+  }
+
+  getSnapshots(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'snapshot');
   }
 
 }

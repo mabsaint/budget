@@ -61,8 +61,10 @@ moment.updateLocale('bg', {
 export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
   events: Array<CalendarEvent<{ time: any }>>;
+  snapshots: Array<any>;
   view: string = CalendarView.Month;
   accounts: BankAccount[];
+  numberofsnapshots = 3;
 
   get available(): number {
     let sum = 0;
@@ -123,7 +125,7 @@ export class CalendarComponent implements OnInit {
 
   getTotalTillCurrent(current: Entry, list: Entry[]) {
     let value = this.available;
-    console.log(value);
+
     const hasBase = list.find((e) => {
       return (e.date === current.date) && e.base;
     });
@@ -196,6 +198,8 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
+    this.getSnapshots();
+    console.log(this.events);
   }
 
   getWeekNumber( d: Date ): number {
@@ -211,6 +215,62 @@ export class CalendarComponent implements OnInit {
      const weekNo: number = Math.ceil(( ( newLocal / 86400000) + 1) / 7);
      // Return array of year and week number
      return  weekNo;
+  }
+
+  doSnapshot() {
+    console.log(this.events);
+    const timestamp = moment().valueOf();
+    this.events.forEach((e) => {
+      e.date = timestamp;
+    });
+
+    this.entryService.doSnapshot(this.events).subscribe((data) => {
+      // console.log(data);
+      this.getSnapshots();
+    });
+  }
+
+  getSnapshots() {
+    this.entryService.getSnapshots()
+    .subscribe((data) => {
+      console.log(data.sort((a, b) => {
+        return a.createdon > b.createdon ? -1 : 1;
+      })
+      .slice(0, this.numberofsnapshots));
+
+      this.snapshots = data
+                      .sort((a, b) => {
+                        return a.createdon > b.createdon ? -1 : 1;
+                      });
+    });
+  }
+
+  loadSnapshot(snapshot) {
+    snapshot.events.map((e) => {
+        e.start = new Date(e.start);
+        const events = this.events.filter((k) => {
+          return k.weekday === e.weekday && k.weeknumber === e.weeknumber;
+        });
+
+        events.forEach(element => {
+          element._total = e.total;
+        });
+
+    });
+    console.log(this.events);
+    // this.events = snapshot.events;
+  }
+
+  get lastSnapshots(): any[] {
+    if (this.snapshots) {
+    return this.snapshots.slice(0, this.numberofsnapshots);
+    } else {
+      return this.snapshots;
+    }
+  }
+
+  moreSnapshots() {
+    this.numberofsnapshots += 1;
   }
 
 }

@@ -3,6 +3,15 @@
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+/* body {
+  font-family: Helvetica, Arial, sans-serif !important;
+  font-size: 9pt !important;
+} */
+
+* {
+   /* background-color: #526B71;
+  color:#F9CA77; */
+}
 .container2 {
   width: 100%;
     /* padding-right: 15px;

@@ -2,6 +2,14 @@
     background-color: green;
 }
 
+.gray {
+  background-color: #aaa;
+}
+
+.red-gray {
+  background-color: #f88;
+}
+
 .ered {
   background-color: #e27e7e;
   font-size: 75%;

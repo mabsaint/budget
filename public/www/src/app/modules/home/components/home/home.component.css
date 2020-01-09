@@ -1,0 +1,14 @@
+.table {
+  border: 0px solid #bcbcbc;
+  /* display:table; */
+  padding: 5px;
+}
+
+.tr {
+  margin-left:5%;
+  margin-right:5%;
+}
+
+.td {
+  border: 1px solid #bcbcbc;
+}

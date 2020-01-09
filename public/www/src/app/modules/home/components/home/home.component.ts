@@ -6,6 +6,7 @@ import highcharts3D from 'highcharts/highcharts-3d.src';
 import { EntryService } from '../../../../services/entry.service';
 import { Entry } from '../../../entries/models/entry';
 import { BankAccount } from '../../../account/account.model';
+
 import * as moment from 'moment';
 
 highcharts3D(Highcharts);
@@ -28,6 +29,7 @@ noData(Highcharts);
 })
 export class HomeComponent implements OnInit {
   accounts: BankAccount[];
+  expenses: Entry[];
 
   get available(): number {
     let sum = 0;
@@ -163,7 +165,8 @@ export class HomeComponent implements OnInit {
     series: [{
       name: 'Налични',
       data: [],
-      color: '#80D499'
+      color: '#80D499',
+      colorValue: '#00ff00'
     }, {
       name: 'Разходи',
       data: [],
@@ -216,7 +219,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
-    this.entryService.getGroupedExpenses().subscribe(data => {
+    this.entryService.getGroupedExpenses(moment().toDate(), moment().add(30, 'days').toDate()).subscribe(data => {
       console.log(data);
       const perc = [];
       let total = 0;
@@ -230,6 +233,8 @@ export class HomeComponent implements OnInit {
         perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
       });
       console.log(perc);
+      this.expenses = data;
+      console.log(this.expenses);
       this.options.series[0].data = perc;
       this.cylOptions.series[0].data = data;
 
@@ -238,17 +243,20 @@ export class HomeComponent implements OnInit {
     });
 
     // get all:
-    this.entryService.getAllFromDateEntries(moment().startOf('month').format('YYYY-MM-DD')).subscribe((data: Array<any>) => {
+    this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
+                                            moment().add(30, 'days').format('YYYY-MM-DD'))
+    .subscribe((data: Array<any>) => {
       this.events = [];
       const totals = [];
       const values = [];
       const xaxis = [];
       const exp = data.filter(e => e.type === 'expense').reduce((t, e) => t - e.value, 0);
-      const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0);
+      const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0)
+      + this.accounts.reduce((t, a) => t + a.value, 0);
 
       console.log(exp);
       console.log(data.filter(e => e.type === 'income'));
-      data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
+      // data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
 
       data.forEach(element => {
 
@@ -310,7 +318,7 @@ export class HomeComponent implements OnInit {
     inclist = value + list.filter((a) =>
                                         (a.moment.format('YYYYMMDD') === current.moment.format('YYYYMMDD')) &&
                                         !a.paid && a.type === 'income'
-                                  ).reduce((a, b) => a + b.value, 0);;
+                                  ).reduce((a, b) => a + b.value, 0);
 
     return inclist;
 
