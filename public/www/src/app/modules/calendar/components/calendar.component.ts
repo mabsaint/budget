@@ -273,4 +273,20 @@ export class CalendarComponent implements OnInit {
     this.numberofsnapshots += 1;
   }
 
+  getDayClass(event) {
+    let className = 'cal-day-badge green';
+    if (event.total < 0) {
+      className = 'cal-day-badge red';
+    } else if (event.total < 100) {
+      className = 'cal-day-badge red-orange';
+    } else if (event.total < 200) {
+      className = 'cal-day-badge orange';
+    } else if (event.total < 300) {
+      className = 'cal-day-badge yellow-orange';
+    } else {
+      className = 'cal-day-badge green';
+    }
+    return className;
+  }
+
 }

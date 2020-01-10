@@ -103,4 +103,8 @@ export class EntryService {
     return this.http.get<any[]>(this.url + 'snapshot');
   }
 
+  updatePrice(id: any): Observable<any> {
+    return this.http.put<any>(this.url + 'updateentry/', id);
+  }
+
 }

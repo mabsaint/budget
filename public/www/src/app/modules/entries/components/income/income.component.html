@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-12">
-      <h4>Приходи до края на месеца</h4>
-    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f>
+      <h4>Приходи до края на месеца <i [ngClass]="{'fa':true, 'fa-plus-square':!showForm, 'fa-minus-square':showForm}" (click)="toggleForm($event)"></i></h4>
+    <form #expenseForm="ngForm" (ngSubmit)="onSubmit()" #f *ngIf="showForm">
       <div class="form-group row">
         <!-- <label for="" class="col-md-12">Category</label> -->
         <select [(ngModel)]="model.category" name="category" class="form-control col-md-3" required placeholder="Category">

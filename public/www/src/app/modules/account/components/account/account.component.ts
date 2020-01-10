@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { BankAccount } from '../../account.model';
@@ -19,6 +19,8 @@ export class AccountComponent implements OnInit {
   account: BankAccount;
   list: BankAccount[];
   types: any = config.type;
+  @ViewChild('value') valueElement: ElementRef;
+
   constructor( private entryservice: EntryService ) { }
 
   ngOnInit() {
@@ -35,9 +37,9 @@ export class AccountComponent implements OnInit {
     })
   }
 
-  editAccount(item:BankAccount) {
+  editAccount(item: BankAccount) {
     this.account = JSON.parse(JSON.stringify(item));
-    console.log(item);
+   this.valueElement.nativeElement.focus();
   }
 
   deleteAccount(item:BankAccount) {

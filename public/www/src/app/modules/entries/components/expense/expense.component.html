@@ -92,6 +92,7 @@
 
         <div class="col-md-6 col-6">
           <input type='filter' [(ngModel)]='nfilter' name="nfilter" />
+          <button (click) = "toggleShowPaid()">Платени</button>
         </div>
         <div class="col-md-6 col-6 text-right"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
     </div>
@@ -100,25 +101,29 @@
 
 
           <!-- <div class="col-md-2 col-3 left text-right"><span  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))" class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}} -->
-          <div class="row" *ngFor="let i of list | filter:nfilter; let x = index;">
-          <div [ngClass]="{'col-md-12':(x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date)))}"  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))">
-            <div class="panel panel-default">
-              <div class="panel-head text-left">
+          <div class="row underline" *ngFor="let i of list | filter:nfilter; let x = index;">
+          <div class="panel-head" [ngClass]="{'col-md-12':(x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date)))}"  *ngIf="x==0 || (x>0 && getDate(i.date) !== getDate(list[x-1].date))">
+            <!-- <div class="panel panel-default">
+              <div class="panel-head text-left"> -->
                   <span  class='span-date'>{{i.date | fmoment:'ddd, Do MMM'}}
                     </span>
                     <span class='red span-val'>{{getDailyExpense(i.date)}} лв.</span>
-              </div>
-            </div>
+              <!-- </div>
+            </div> -->
           </div>
-          <div class="col-md-4 col-4 left text-right">
-              <span class="red" [ngClass]="i.paid ? 'strike' : ''">{{i.value}} лв.</span>
+          <div class="col-md-4 col-4 left  text-right" *ngIf="!i.paid || showPaid">
+
+            <span (click)="editPrice(i)" class="float-left"><i class="fa fa-edit"></i></span>
+            <span class="red" [ngClass]="i.paid ? 'strike' : ''" (dblclick)="editPrice(i)" *ngIf="!i.editMode">{{i.value}} лв.</span>
+            <input class="col-8" [(ngModel)]="i.value" *ngIf="i.editMode" (keyup)="onKeyUp($event, i)" />
+
           </div>
-          <div class="col-md-4 col-4 text-left">
+          <div class="col-md-4 col-4 text-left " *ngIf="!i.paid || showPaid">
 
                     {{i.category}}<span *ngIf='i.note'>- {{i.note}}</span>
 
           </div>
-          <div class="col-md-4 col-4 text-right">
+          <div class="col-md-4 col-4 text-right " *ngIf="!i.paid || showPaid">
               <!-- <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp; -->
               <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
               <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>

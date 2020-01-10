@@ -25,11 +25,7 @@
   padding-top: 5px;
 }
 
-.panel-head {
-  background-color: #efefef;
-  padding: 5px;
-  font-weight: bold;
-}
+
 
 .panel-body {
  padding: 10px;
@@ -52,6 +48,10 @@
 
 .strike {
   text-decoration: line-through;
+}
+
+.underline {
+  border-bottom: 1px solid #dcdcdc;
 }
 
 

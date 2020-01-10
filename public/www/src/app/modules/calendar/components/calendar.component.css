@@ -2,12 +2,25 @@
     background-color: green;
 }
 
+.orange {
+  background-color: #FF8C00;
+}
+
+.red-orange {
+  background-color: #ff4500;
+}
+
+.yellow-orange {
+  background-color: #FFD800;
+}
+
 .gray {
   background-color: #aaa;
 }
 
 .red-gray {
-  background-color: #f88;
+  background-color: #aaa;
+  color: red;
 }
 
 .ered {

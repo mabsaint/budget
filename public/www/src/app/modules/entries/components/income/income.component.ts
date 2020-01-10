@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Entry } from "../../models/entry";
+import { Entry } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './income.config';
 import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
@@ -17,15 +17,15 @@ export class IncomeComponent implements OnInit {
   submitted = false;
   categories = config.categories.sort((a,b) => {return a.title >b.title ? 0 : -1});
   periods = config.periods;
+  showForm = false;
+  private _from: Date = new Date()
+  private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
+  private JSON: any;
 
-  private _from:Date = new Date()
-  private _to:Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
-  private JSON:any;
-
-  get total() : number {
+  get total(): number {
     var ans = 0;
     this.list.forEach(element => {
-      ans += element.value
+      ans += element.value;
     });
     return ans;
   }
@@ -86,6 +86,10 @@ export class IncomeComponent implements OnInit {
   }
 
   get diagnostic() { return JSON.stringify(this.model); }
+
+  toggleForm(event) {
+    this.showForm = ! this.showForm;
+  }
 
 
 

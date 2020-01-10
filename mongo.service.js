@@ -158,7 +158,7 @@ module.exports = {
      * Retrieves all entries based on started date     * 
      * @param  {} start=null
      */
-    getAll: function (start = null) {
+    getAll: function (start = null, end = null) {
         return new Promise(function (resolve, reject) {
             var filter = {};
             if (start) {
@@ -169,6 +169,10 @@ module.exports = {
                 filter.date = {
                     $gte: new Date(start)
                 };
+            }
+
+            if (end) {
+                filter.date.$lte = new Date(end)
             }
             console.log(filter);
             db[collectionName].find(filter).sort({
@@ -446,12 +450,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             db.entries.findOne({
                 "_id": db.ObjectId(id)
-            }, function (err, item) {
-                console.log(item);
-                // resolve(item)
-
-                // var temp = JSON.parse(JSON.stringify(item));
-                //  delete item._id;
+            }, function (err, item) {               
                 item.paid = item.paid ? false : true;
                 db.entries.update({
                     "_id": db.ObjectId(id)
@@ -535,6 +534,93 @@ module.exports = {
                     resolve(data);
                 }
             })
+        })
+    },  
+
+    getSnapShots: function() {
+        return new Promise(function(resolve, reject){
+            let query = "db.getCollection('snapshot').aggregate([\
+                {$group:{_id:{\
+                    created:'$created_on',\
+                    date:'$date'}, snapshots:{$push:'$$ROOT'}}\
+                },\
+                {$addFields:{\
+                    'item.date':'$_id.date',\
+                    'item.createdon':'$_id.created',\
+                    'item.events':'$snapshots'\
+                    }\
+                },\
+                {$replaceRoot:{newRoot:'$item'}}\
+                ])";
+
+            db.snapshot.aggregate([
+                {$group:{
+                    _id: {
+                        created: "$created_on",
+                        date: "$date"
+                    },
+                    snapshots: {
+                        $push:"$$ROOT"
+                    }
+                }},
+                {$addFields:{
+                    'item.date':'$_id.date',
+                    'item.createdon':'$_id.created',
+                    'item.events':'$snapshots'
+                    }
+                },
+                 {$replaceRoot: {
+                     newRoot: "$item"
+                 }}
+            ], (error, data)=>{
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            })
+        })
+    },
+    snapShot: function (events) {
+        return new Promise(function (resolve, reject) {
+            let createdon = new Date();
+            events.forEach((e)=>{
+                e.created_on = createdon
+            })
+            db.snapshot.save(events, function (error, data) {
+                if (error) {
+                    reject(error)
+                } else {
+                   // let snaps = this.getSnapShots();
+                    resolve(data);
+                }
+            })
+        })
+    },
+
+    putUpdateEntry: function (request) {
+        return new Promise( function (resolve, reject) {
+            var obj = request.body;
+            var id = obj._id;
+            var value = parseFloat(obj.value);
+            if ( obj.type == 'expense' && value > 0 ) {
+                value = (-1) * value
+            }
+            db.entries.findOne({
+                "_id": db.ObjectId(id)
+            }, function (err, item) {               
+                item.value = value;
+                db.entries.update({
+                    "_id": db.ObjectId(id)
+                }, item, {}, function (error, data) {
+                    if (error) reject(error);
+                    else {
+                        resolve(item);
+                    }
+                });
+
+            })
+            
         })
     }
     // #endregion

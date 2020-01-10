@@ -176,6 +176,14 @@ app.route('/all/:start')
             res.send(result);
         })
     })
+
+app.route('/all/:start/:end')
+    .get(function(req, res){
+        mongoservice.getAll(req.params.start, req.params.end)
+        .then(function (result) {
+            res.send(result);
+        })
+    })
 /** Accounts */
 app.route('/accounts')
     .get(function(req, res){
@@ -228,12 +236,47 @@ app.route('/accounts')
         })
     })
 
+    app.route('/grouped/:start/:end')
+    .get(function(req, res){
+        mongoservice.groupedByCategory(req.params.start, req.params.end)
+        .then(function(data){
+           let answer = [];
+           data.forEach(element => {
+              answer.push({name: element._id, y: element.total * (-1)}) 
+           });
+            res.send(answer)
+        })
+    })
+
     app.route('/logininfo')
     .get(function(request, response){
         mongoservice.getLoginInfo()
         .then(function(data) {
             response.send(data)
         })
+    })
+
+    app.route('/snapshot')
+    .get(function(request, response){
+        mongoservice.getSnapShots()
+        .then(function(data){
+            response.send(data)
+        })
+    })
+    .post(function(request, response){
+        var body = request.body;
+        mongoservice.snapShot(body)
+        .then(function(data){
+            response.send(data);
+        })
+    })
+
+    app.route('/updateentry/')
+    .put(function (request, res) {
+        mongoservice.putUpdateEntry(request)
+            .then(function (result) {
+                res.send(result);
+            });
     })
 
 app.use(function (req, res, next) {

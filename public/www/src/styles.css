@@ -27,28 +27,15 @@ ul.nav {
 .account-title {
   color: #700;
 }
-@media screen and (max-width: 400px) {
-  div.list-row {
-    font-size: 0.75rem;
-    /* border:1px solid #999; */
 
-    /* margin-bottom: 5px; */
-  }
+.btn-primary {
+  background-color:#7B878B !important;
+  border-color: rgb(65, 71, 73) !important;
+}
 
-  h4 {
-    font-size: 1.15rem;
-  }
-
-  .head {
-    background-color: #178d96;
-    color: #fefefe;
-    padding:3px 3px;
-  }
-  }
-
-  .topnav {
+.topnav {
     overflow: hidden;
-    background-color: #dcdcdc;
+    background-color: #BBCEA1;
   }
 
   .topnav a {
@@ -74,6 +61,32 @@ ul.nav {
   .topnav .icon {
     display: none;
   }
+
+  .panel-head {
+    background-color: #efefef;
+    padding: 5px;
+    font-weight: bold;
+  }
+
+  @media screen and (max-width: 400px) {
+    div.list-row {
+      font-size: 0.75rem;
+      /* border:1px solid #999; */
+
+      /* margin-bottom: 5px; */
+    }
+
+    h4 {
+      font-size: 1.15rem;
+    }
+
+    .head {
+      background-color: #efefef;
+      color: #212529;
+      font-weight: bold;
+      padding:3px 3px;
+    }
+    }
 
   @media screen and (max-width: 670px) {
     .topnav a {display: none;}

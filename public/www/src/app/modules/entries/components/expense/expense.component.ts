@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm, FormControl, FormGroup } from '@angular/forms';
 import { Entry, ICategory } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
@@ -6,11 +6,14 @@ import {config} from './expense.config';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import * as moment from 'moment';
+import {FilterPipe} from '../../../../core/pipes/filter.pipe';
 
 @Component({
   selector: 'app-expense',
   templateUrl: './expense.component.html',
-  styleUrls: ['./expense.component.css']
+  styleUrls: ['./expense.component.css'],
+  providers: [FilterPipe]
+ // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpenseComponent implements OnInit {
 
@@ -24,6 +27,7 @@ export class ExpenseComponent implements OnInit {
   periods = config.periods;
   nfilter = '';
   showForm = false;
+  showPaid = false;
 
   json = JSON;
 
@@ -53,7 +57,7 @@ export class ExpenseComponent implements OnInit {
     return currentcat ? currentcat.subcategories : [];
   }
 
-  constructor( private entryService: EntryService) {
+  constructor( private entryService: EntryService, private filterPipe: FilterPipe) {
     this.JSON = JSON;
    }
 
@@ -87,6 +91,7 @@ export class ExpenseComponent implements OnInit {
   }
 
   onFocus ( e ) {
+
     this.filteredCategories = this.catControl.valueChanges
     .pipe(
       startWith(''),
@@ -159,7 +164,13 @@ export class ExpenseComponent implements OnInit {
       this.list = data.sort((a, b) => {
         return a.date > b.date ? 1 : -1;
       });
+      this.modifyList();
+      console.log(this.list);
     });
+  }
+
+  modifyList() {
+    this.list.map( e => e.editMode = false );
   }
 
   setInterval(data: Date[]) {
@@ -176,11 +187,42 @@ export class ExpenseComponent implements OnInit {
   get diagnostic() { return JSON.stringify(this.model); }
 
   getDailyExpense(day: Date) {
-    return this.list.filter(l => moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do')).reduce((a, b) => a + b['value'], 0);
+    var filtered = this.filterPipe.transform(this.list, [this.nfilter]);
+    return filtered.filter(l => !l.paid && moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do'))
+        .reduce((a, b) => a + parseFloat(b['value']), 0);
   }
 
   toggleForm(event) {
     this.showForm = !this.showForm;
+  }
+
+  editPrice(element) {
+    console.log(element.editMode);
+    if (element.editMode) {
+      console.log(element);
+      this.entryService.updatePrice(element).subscribe((item: any) => {
+        element.value = item.value;
+        element.editMode = !element.editMode;
+      });
+    } else {
+      element.editMode = true;
+    }
+  }
+
+  filterUnpayed() {
+    this.list = this.list.filter(l => !l.payed);
+  }
+
+  toggleShowPaid() {
+    this.showPaid = !this.showPaid;
+
+  }
+
+  onKeyUp(event, element) {
+    console.log(event);
+    if (event.keyCode === 13 /* Enter button */ ) {
+      this.editPrice(element);
+    }
   }
 
 }

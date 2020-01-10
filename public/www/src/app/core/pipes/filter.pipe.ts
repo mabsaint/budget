@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterPipe implements PipeTransform {
 
   transform(value: Array<any>, args?: Array<any>): any {
-    console.log(args);
+
    if (!args) {
      return value;
    }
@@ -14,7 +14,7 @@ export class FilterPipe implements PipeTransform {
       if (!e.category) {
         return true;
       }
-      return e.category.indexOf(args) > -1;
+      return e.category.toLowerCase().indexOf(args.toString().toLowerCase()) > -1;
     });
     return value.filter(e => e.category.indexOf(args) > -1);
   }
