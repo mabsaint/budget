@@ -219,7 +219,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
-    this.entryService.getGroupedExpenses(moment().toDate(), moment().add(30, 'days').toDate()).subscribe(data => {
+    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().endOf('month').toDate()).subscribe(data => {
       console.log(data);
       const perc = [];
       let total = 0;
