@@ -17,7 +17,7 @@ app.engine('html', require('ejs').renderFile);
 
 // Setup CORS:
 const cors = require('cors');
-const whitelist = ['http://mybudget.website', 'http://localhost:4200'];
+const whitelist = ['http://fambudget.space', 'http://localhost:4200'];
 
 var corsOptions = {
     origin: whitelist,
@@ -269,6 +269,16 @@ app.route('/accounts')
         .then(function(data){
             response.send(data);
         })
+    })
+
+    app.route('/removesnapshot')
+    .put(function (request, response) {
+        let body = request.body;
+        mongoservice.removeSnapshot(body)
+        .then(function(data){
+            response.send(data)
+        })
+       
     })
 
     app.route('/updateentry/')

@@ -54,3 +54,28 @@ span.hr {
   border-top:1px solid #aaa;
 }
 
+div.snapshots a {
+  color: #212529;
+}
+
+.up::after {
+  font-family: FontAwesome;
+  content: "\f062";
+  color: green;
+}
+
+.down::after {
+  font-family: FontAwesome;
+  content: "\f063";
+  color: red;
+}
+
+.camera {
+  margin-left:0.25rem;
+  float:right;
+}
+
+.head {
+  margin-top: 1rem;
+}
+

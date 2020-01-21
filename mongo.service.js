@@ -598,6 +598,20 @@ module.exports = {
         })
     },
 
+    removeSnapshot: function (snapshot) {
+        return new Promise(function (resolve, reject) {
+            db.snapshot.remove({
+                'date' : snapshot.date
+            }, function(error, data) {
+                if (error) {
+                    reject(error)
+                } else {                    
+                    resolve(data);
+                }
+            })
+        })
+    },
+
     putUpdateEntry: function (request) {
         return new Promise( function (resolve, reject) {
             var obj = request.body;

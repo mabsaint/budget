@@ -273,16 +273,21 @@ export class CalendarComponent implements OnInit {
     this.numberofsnapshots += 1;
   }
 
+  removeSnapshot(s) {
+    if ( confirm('Да се изтрие ли записа?') ) {
+    const self = this;
+    this.entryService.removeSnapshot(s).subscribe(function(data) {
+      self.getSnapshots();
+    });
+  }
+  }
+
   getDayClass(event) {
     let className = 'cal-day-badge green';
     if (event.total < 0) {
       className = 'cal-day-badge red';
-    } else if (event.total < 100) {
-      className = 'cal-day-badge red-orange';
     } else if (event.total < 200) {
       className = 'cal-day-badge orange';
-    } else if (event.total < 300) {
-      className = 'cal-day-badge yellow-orange';
     } else {
       className = 'cal-day-badge green';
     }

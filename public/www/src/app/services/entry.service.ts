@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { BankAccount } from '../modules/account/account.model';
 
 import * as moment from 'moment';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -22,7 +23,7 @@ export class EntryService {
   private url: string;
   constructor( private http: HttpClient ) {
 //    this.url = "http://localhost:3000/";
-    this.url = 'http://mybudget.website:3000/';
+    this.url = environment.baseURL + ':3000/';
    }
 
   insertEntry( entry: Entry ): Observable<Entry> {
@@ -101,6 +102,10 @@ export class EntryService {
 
   getSnapshots(): Observable<any[]> {
     return this.http.get<any[]>(this.url + 'snapshot');
+  }
+
+  removeSnapshot(snapshot: any): Observable<any[]> {
+    return this.http.put<any[]>(this.url + 'removesnapshot', snapshot);
   }
 
   updatePrice(id: any): Observable<any> {

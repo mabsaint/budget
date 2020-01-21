@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../interfaces/user';
 import { Observable } from 'rxjs';
 import * as SHA1 from 'js-sha1';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AuthService {
   private url: string;
 
   constructor(private client: HttpClient) {
-    this.url = 'http://mybudget.website:3000/';
+    this.url = environment.baseURL + ':3000/';
   }
 
   getLoginInfo(): Observable<any> {
