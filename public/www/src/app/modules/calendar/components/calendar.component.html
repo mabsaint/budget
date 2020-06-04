@@ -12,11 +12,11 @@
     <span *ngIf='day.events.length > 0 && day.events[0].weekday == 0' class='span-balanse'>За седмицата: {{events | sumweekly:day.events[0].weeknumber}}</span>
 <br/>
 
-<span [ngClass]="getDayClass(day.events[0])" *ngIf='day.events.length > 0'>{{
-  day.events[0].total }} лв.
+<span [ngClass]="getDayClass(day.events[0])" *ngIf='day.events.length > 0'>
+  {{day.events[0].total }} лв.
 </span>
-<span [ngClass]="day.events[0]._total > day.events[0].total ? 'cal-day-badge red-gray down' : 'cal-day-badge gray up'" *ngIf='day.events.length > 0 && day.events[0]._total'>{{
-     day.events[0]._total }} лв.
+<span [ngClass]="day.events[0]._total > day.events[0].total ? 'cal-day-badge red-gray down' : 'cal-day-badge gray up'" *ngIf='day.events.length > 0 && day.events[0]._total'>
+  {{day.events[0].total - day.events[0]._total }} лв.
 </span>
 
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
