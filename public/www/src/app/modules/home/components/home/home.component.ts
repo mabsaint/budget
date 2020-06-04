@@ -28,8 +28,9 @@ noData(Highcharts);
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  accounts: BankAccount[];
+  accounts: BankAccount[] = [];
   expenses: Entry[];
+  totalExpense = 0;
 
   get available(): number {
     let sum = 0;
@@ -237,6 +238,7 @@ export class HomeComponent implements OnInit {
       console.log(this.expenses);
       this.options.series[0].data = perc;
       this.cylOptions.series[0].data = data;
+      this.totalExpense = total;
 
       Highcharts.chart('pie', this.options); // .setSize(300, 200);
       Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
@@ -254,11 +256,12 @@ export class HomeComponent implements OnInit {
       const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0)
       + this.accounts.reduce((t, a) => t + a.value, 0);
 
-      console.log(exp);
+      console.log(data.sort((a, b) => a.date >= b.date ? 1 : -1));
       console.log(data.filter(e => e.type === 'income'));
       // data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
 
-      data.forEach(element => {
+      data.filter( e => !e.paid)
+      .forEach(element => {
 
         const el = this.events.find(e => e.start === moment(element.date).startOf('day').format('YYYY-MM-DD'));
         if (el) {
@@ -276,6 +279,9 @@ export class HomeComponent implements OnInit {
       });
       const remains = this.events[this.events.length - 1].total;
       this.events = this.events.sort((a, b) => a.start >= b.start ? 1 : -1);
+
+      console.log(this.events);
+
       this.events.forEach((e) => {
         values.push(e.value);
         totals.push(e.total);
@@ -303,24 +309,26 @@ export class HomeComponent implements OnInit {
   }
 
   getRemains(current: Entry, list: Entry[]): number {
-    return this.available + list.filter( t => t.moment < current.moment).reduce((a, b) => a + b.value, 0);
+    return list.filter( t => t.moment.isBefore(current.moment) && !t.paid).reduce((a, b) => a + b.value, this.available);
   }
 
   getTotalTillCurrent(current: Entry, list: Entry[]) {
-    let value = this.getRemains(current, list);
-    let inclist: number;
 
     list.forEach(a => a.moment = moment(a.date).startOf('day'));
     list.sort((a, b) => a.moment >= b.moment ? 1 : -1);
     current.moment = moment(current.date).startOf('day');
 
-    value = this.getRemains(current, list);
-    inclist = value + list.filter((a) =>
-                                        (a.moment.format('YYYYMMDD') === current.moment.format('YYYYMMDD')) &&
-                                        !a.paid && a.type === 'income'
-                                  ).reduce((a, b) => a + b.value, 0);
+    const value = this.getRemains(current, list);
+    // let inclist: number;
+   // value = this.getRemains(current, list);
 
-    return inclist;
+
+    // inclist = value + list.filter((a) =>
+    //                                     (a.moment < current.moment) &&
+    //                                     !a.paid && a.type === 'income'
+    //                               ).reduce((a, b) => a + b.value, 0);
+
+    return value;
 
   }
 
