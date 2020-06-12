@@ -165,7 +165,7 @@ export class ExpenseComponent implements OnInit {
         return a.date > b.date ? 1 : -1;
       });
       this.modifyList();
-      console.log(this.list);
+      //console.log(this.list);
     });
   }
 
@@ -187,7 +187,9 @@ export class ExpenseComponent implements OnInit {
   get diagnostic() { return JSON.stringify(this.model); }
 
   getDailyExpense(day: Date) {
-    var filtered = this.filterPipe.transform(this.list, [this.nfilter]);
+    var filtered = this.filterPipe.transform(this.list, this.nfilter);
+   // console.log(filtered);
+
     return filtered.filter(l => !l.paid && moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do'))
         .reduce((a, b) => a + parseFloat(b['value']), 0);
   }

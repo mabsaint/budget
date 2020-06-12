@@ -65,6 +65,7 @@ export class CalendarComponent implements OnInit {
   view: string = CalendarView.Month;
   accounts: BankAccount[];
   numberofsnapshots = 3;
+  accountSubcription: any;
 
   get available(): number {
     let sum = 0;
@@ -159,7 +160,8 @@ export class CalendarComponent implements OnInit {
 
     this.entryService.getAllEntries(true).subscribe((data: Array<Entry>) => {
       this.events = [];
-
+      console.log(data);
+      const joData = JSON.parse(JSON.stringify(data));
       data.forEach(element => {
         if (!element.paid) {
         this.events.push({
@@ -170,7 +172,7 @@ export class CalendarComponent implements OnInit {
           value: element.value,
           income: (element.type === 'income' ? element.value : 0),
           expense: (element.type === 'expense' ? element.value : 0),
-          total: this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data))),
+          total: this.getTotalTillCurrent(element, joData),
           resizable: {
             beforeStart: true,
             afterEnd: true
@@ -190,16 +192,20 @@ export class CalendarComponent implements OnInit {
   }
 
   loadAccounts() {
-    this.entryService.getAccounts().subscribe((data) => {
+    return this.entryService.getAccounts().subscribe((data) => {
       this.accounts = data;
       this.loadEvents();
     });
   }
 
   ngOnInit() {
-    this.loadAccounts();
+    this.accountSubcription = this.loadAccounts();
     this.getSnapshots();
     console.log(this.events);
+  }
+
+  ngOnDestroy() {
+    this.accountSubcription.unsubscribe();
   }
 
   getWeekNumber( d: Date ): number {

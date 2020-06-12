@@ -1,6 +1,15 @@
 <script src="https://code.highcharts.com/highcharts.js"></script>
 
   <div class="row">
+    <div class="col-md-12">
+      <label for="customRange1">Период до: &nbsp;</label>{{endPeriod}}
+      <input type="range" class="custom-range"
+        id="offset"
+        min="1"
+        max="365"
+        [(ngModel)]='offset'
+        (change) = 'changeOffset()' />
+    </div>
     <div class="col-md-12"><div id="line"></div></div>
     <div class="col-md-6"><div id="pie"></div></div>
     <div class="col-md-6"><div id="cylinder"></div></div>

@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   accounts: BankAccount[] = [];
   expenses: Entry[];
   totalExpense = 0;
-
+  offset: number;
   get available(): number {
     let sum = 0;
     if (this.accounts) {
@@ -39,6 +39,11 @@ export class HomeComponent implements OnInit {
     }
     return sum;
   }
+
+  get endPeriod(): any {
+    return moment().startOf('day').add(this.offset, 'days').format('DD MMM Y');
+  }
+
   public options: any = {
     chart: {
       type: 'pie',
@@ -125,7 +130,7 @@ export class HomeComponent implements OnInit {
       text: 'Месечен баланс'
     },
     subtitle: {
-      text: 'до края на месеца ' + moment().endOf('month').fromNow()
+      text: 'до ' + moment().add(this.offset, 'days').endOf('day').fromNow()
     },
     xAxis: {
       categories: {
@@ -219,6 +224,9 @@ export class HomeComponent implements OnInit {
   constructor(private entryService: EntryService) { }
 
   ngOnInit() {
+    this.offset = moment().endOf('month').diff(moment().startOf('day'), 'days');
+    this.lineOptions.subtitle.text = 'до ' + moment().add(this.offset, 'days').endOf('day').fromNow();
+
     this.loadAccounts();
     this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().endOf('month').toDate()).subscribe(data => {
       console.log(data);
@@ -246,29 +254,34 @@ export class HomeComponent implements OnInit {
 
     // get all:
     this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
-                                            moment().add(30, 'days').format('YYYY-MM-DD'))
-    .subscribe((data: Array<any>) => {
-      this.events = [];
-      const totals = [];
-      const values = [];
-      const xaxis = [];
-      const exp = data.filter(e => e.type === 'expense').reduce((t, e) => t - e.value, 0);
-      const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0)
+      moment().add(this.offset, 'days').format('YYYY-MM-DD'))
+      .subscribe((data: Array<any>) => {
+        this.drawLines(data);
+      });
+
+
+  }
+
+  private drawLines(data: any[]) {
+    this.events = [];
+    const totals = [];
+    const values = [];
+    const xaxis = [];
+    const exp = data.filter(e => e.type === 'expense').reduce((t, e) => t - e.value, 0);
+    const inc = data.filter(e => e.type === 'income').reduce((t, e) => t + e.value, 0)
       + this.accounts.reduce((t, a) => t + a.value, 0);
-
-      console.log(data.sort((a, b) => a.date >= b.date ? 1 : -1));
-      console.log(data.filter(e => e.type === 'income'));
-      // data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
-
-      data.filter( e => !e.paid)
+    console.log(data.sort((a, b) => a.date >= b.date ? 1 : -1));
+    console.log(data.filter(e => e.type === 'income'));
+    // data = data.filter(e => moment(e.date).startOf('day') >= moment().startOf('day') && moment(e.date) <= moment().endOf('month'));
+    data.filter(e => !e.paid)
       .forEach(element => {
-
         const el = this.events.find(e => e.start === moment(element.date).startOf('day').format('YYYY-MM-DD'));
         if (el) {
           el.value += element.value < 0 ? element.value * (-1) : 0;
           el.total = this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)));
           //  el.datestr =  element.date.substr(0, 19);
-        } else {
+        }
+        else {
           this.events.push({
             start: moment(element.date).startOf('day').format('YYYY-MM-DD'),
             datestr: moment(element.date).startOf('day'),
@@ -277,29 +290,22 @@ export class HomeComponent implements OnInit {
           });
         }
       });
-      const remains = this.events[this.events.length - 1].total;
-      this.events = this.events.sort((a, b) => a.start >= b.start ? 1 : -1);
-
-      console.log(this.events);
-
-      this.events.forEach((e) => {
-        values.push(e.value);
-        totals.push(e.total);
-        xaxis.push(moment(e.datestr).format('Do MMM'));
-      });
-
-      this.lineOptions.series[0].data = totals;
-      this.lineOptions.series[1].data = values;
-      this.lineOptions.xAxis.categories = xaxis;
-      // this.lineOptions.plotOptions.area.pointStart = xaxis[0];
-      Highcharts.chart('line', this.lineOptions); // .setSize(300, 200);
-
-      this.balanceOptions.series[0].data = [['Приходи', inc], ['Разходи', exp], ['Рзлика', (inc - (exp + remains))]];
-      Highcharts.chart('balance', this.balanceOptions);
-      console.log(this.events);
+    const remains = this.events[this.events.length - 1].total;
+    this.events = this.events.sort((a, b) => a.start >= b.start ? 1 : -1);
+    console.log(this.events);
+    this.events.forEach((e) => {
+      values.push(e.value);
+      totals.push(e.total);
+      xaxis.push(moment(e.datestr).format('Do MMM'));
     });
-
-
+    this.lineOptions.series[0].data = totals;
+    this.lineOptions.series[1].data = values;
+    this.lineOptions.xAxis.categories = xaxis;
+    // this.lineOptions.plotOptions.area.pointStart = xaxis[0];
+    Highcharts.chart('line', this.lineOptions); // .setSize(300, 200);
+    this.balanceOptions.series[0].data = [['Приходи', inc], ['Разходи', exp], ['Рзлика', (inc - (exp + remains))]];
+    Highcharts.chart('balance', this.balanceOptions);
+    console.log(this.events);
   }
 
   loadAccounts() {
@@ -309,7 +315,7 @@ export class HomeComponent implements OnInit {
   }
 
   getRemains(current: Entry, list: Entry[]): number {
-    return list.filter( t => t.moment.isBefore(current.moment) && !t.paid).reduce((a, b) => a + b.value, this.available);
+    return list.filter(t => t.moment.isBefore(current.moment) && !t.paid).reduce((a, b) => a + b.value, this.available);
   }
 
   getTotalTillCurrent(current: Entry, list: Entry[]) {
@@ -320,7 +326,7 @@ export class HomeComponent implements OnInit {
 
     const value = this.getRemains(current, list);
     // let inclist: number;
-   // value = this.getRemains(current, list);
+    // value = this.getRemains(current, list);
 
 
     // inclist = value + list.filter((a) =>
@@ -330,6 +336,14 @@ export class HomeComponent implements OnInit {
 
     return value;
 
+  }
+
+  changeOffset() {
+    this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
+      moment().add(this.offset, 'days').format('YYYY-MM-DD'))
+      .subscribe((data: Array<any>) => {
+        this.drawLines(data);
+      });
   }
 
 }
