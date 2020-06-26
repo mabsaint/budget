@@ -202,6 +202,7 @@ export class ExpenseComponent implements OnInit {
     console.log(element.editMode);
     if (element.editMode) {
       console.log(element);
+      element.updated_at = new Date();
       this.entryService.updatePrice(element).subscribe((item: any) => {
         element.value = item.value;
         element.editMode = !element.editMode;

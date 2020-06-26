@@ -176,7 +176,8 @@ export class HomeComponent implements OnInit {
     }, {
       name: 'Разходи',
       data: [],
-      color: '#FFC1B8'
+      color: '#FFC1B8',
+      colorValue: '#ff0000'
     }]
   };
 

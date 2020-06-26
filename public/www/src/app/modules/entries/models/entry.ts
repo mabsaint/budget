@@ -12,7 +12,9 @@ export class Entry {
     public base = false;
     public paid?: boolean;
     public moment?: any;
-    constructor(type: string = 'expense') { this.type = type; }
+    public updated_at?: Date;
+    public created_at?: Date;
+    constructor(type: string = 'expense') { this.type = type; this.created_at = new Date(); }
 }
 
 export interface ICategory {
