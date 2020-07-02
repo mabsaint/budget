@@ -7,6 +7,9 @@ import * as moment from 'moment';
 export class FmomentPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
+    if (!value) {
+      return '';
+    }
     return moment(value).format(args);
   }
 

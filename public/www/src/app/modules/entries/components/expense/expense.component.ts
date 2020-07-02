@@ -189,7 +189,10 @@ export class ExpenseComponent implements OnInit {
   getDailyExpense(day: Date) {
     var filtered = this.filterPipe.transform(this.list, this.nfilter);
    // console.log(filtered);
-
+    if ( this.showPaid ){
+      return  filtered.filter(l => moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do'))
+      .reduce((a, b) => a + parseFloat(b['value']), 0);
+    }
     return filtered.filter(l => !l.paid && moment(l.date).format('MMMM Do') === moment(day).format('MMMM Do'))
         .reduce((a, b) => a + parseFloat(b['value']), 0);
   }

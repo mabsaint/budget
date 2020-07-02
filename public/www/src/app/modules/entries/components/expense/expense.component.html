@@ -102,7 +102,7 @@
           />
           </label>
         </div>
-        <div class="col-md-4 col-4 text-right"> <h4 class="red">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
+        <div class="col-md-4 col-4 text-right"> <h4 class="red">{{list | filter:nfilter | sum:'value':showPaid}} лв.</h4></div>
     </div>
     <div class="conent">
         <!-- <div class="row list-row" *ngFor="let i of list | filter:nfilter; let x = index;" [ngClass]="(getDate(i.date) % 2 > 0)? '_odd' : '_even'"> -->
@@ -128,7 +128,7 @@
           </div>
           <div class="col-md-4 col-4 text-left " *ngIf="!i.paid || showPaid">
 
-                    {{i.category}}<span *ngIf='i.note'>- {{i.note}}</span>
+                    {{i.category}}<span *ngIf='i.note'>- {{i.note}}</span><span class="updatedat">Updated at:&nbsp;{{i.updated_at | fmoment:'ddd, Do MMM H:m'}}</span>
 
           </div>
           <div class="col-md-4 col-4 text-right " *ngIf="!i.paid || showPaid">
@@ -165,7 +165,7 @@
     </div>
     <div class="row">
         <div class="col-md-6 col-6"> </div>
-        <div class="col-md-6 col-6"><h4 class="red text-right">{{list | filter:nfilter | sum:'value'}} лв.</h4></div>
+        <div class="col-md-6 col-6"><h4 class="red text-right">{{list | filter:nfilter | sum:'value':showPaid}} лв.</h4></div>
     </div>
   </div>
 

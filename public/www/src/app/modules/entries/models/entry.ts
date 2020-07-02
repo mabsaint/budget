@@ -14,7 +14,7 @@ export class Entry {
     public moment?: any;
     public updated_at?: Date;
     public created_at?: Date;
-    constructor(type: string = 'expense') { this.type = type; this.created_at = new Date(); }
+    constructor(type: string = 'expense') { this.type = type; this.created_at = this.updated_at = new Date(); }
 }
 
 export interface ICategory {

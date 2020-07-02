@@ -54,4 +54,11 @@
   border-bottom: 1px solid #dcdcdc;
 }
 
+.updatedat {
+  color: #999;
+  margin-left: 1rem;
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
 
