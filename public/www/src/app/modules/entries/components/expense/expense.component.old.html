@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-12">
-    <h4>Разходи до края на месеца <i [ngClass]="{'fa':true, 'fa-plus-square':!showForm, 'fa-minus-square':showForm}" (click)="toggleForm($event)"></i> </h4>
+    <h4>Разходи до края на месеца <i [ngClass]="{'fa':true, 'fa-plus-square':!showForm, 'fa-minus-square':showForm}" (click)="toggleForm($event)"></i> {{currency}}</h4>
 
     <!-- <div class="row list-row" *ngFor="let i of list" [ngClass]="(getDate(i.date) % 2 > 0)? 'odd' : 'even'">
       <div class="col-md-2 col-12 head">{{i.date | date:'dd MMM'}}</div>

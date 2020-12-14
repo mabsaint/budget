@@ -23,7 +23,7 @@ export class EntryService {
   private url: string;
   constructor( private http: HttpClient ) {
 //    this.url = "http://localhost:3000/";
-    this.url = environment.baseURL + ':3100/';
+    this.url = environment.baseURL + ':3000/';
    }
 
   insertEntry( entry: Entry ): Observable<Entry> {

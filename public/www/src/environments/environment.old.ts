@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseURL: 'http://swiss.fambudget.space'
+  baseURL: 'http://fambudget.space'
 };
 
 /*

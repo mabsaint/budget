@@ -1,4 +1,5 @@
 export var config = {
+  "currency": "CHF",
     "oldcategories" : [ {'Жилище':[
         "Ток","Вода"
     ]},
@@ -37,6 +38,6 @@ export var config = {
         {'key':'', 'value': '-- none --'},
         {'key':'daily','value':'на ден'},
         {'key':'weekly','value':'на седмица'},
-        {'key':'monthly','value':'на месец'}
+        {'key':'monthly','value':'на месец'},3
     ]
 }

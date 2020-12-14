@@ -12,7 +12,7 @@ export class AuthService {
   private url: string;
 
   constructor(private client: HttpClient) {
-    this.url = environment.baseURL + ':3100/';
+    this.url = environment.baseURL + ':3000/';
   }
 
   getLoginInfo(): Observable<any> {

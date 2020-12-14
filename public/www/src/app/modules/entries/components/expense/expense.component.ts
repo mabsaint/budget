@@ -3,6 +3,7 @@ import { NgForm, FormControl, FormGroup } from '@angular/forms';
 import { Entry, ICategory } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './expense.config';
+import {appconfig} from './../../../../configs/appconfig';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -28,6 +29,7 @@ export class ExpenseComponent implements OnInit {
   nfilter = '';
   showForm = false;
   showPaid = false;
+  currency = appconfig.currency;
 
   json = JSON;
 

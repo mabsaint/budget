@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Entry } from '../../models/entry';
 import { EntryService } from '../../../../services/entry.service';
 import {config} from './income.config';
+import {appconfig} from './../../../../configs/appconfig';
 import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 @Component({
@@ -15,15 +16,17 @@ export class IncomeComponent implements OnInit {
   model = new Entry();
   list = new Array();
   submitted = false;
-  categories = config.categories.sort((a,b) => {return a.title >b.title ? 0 : -1});
+  categories = config.categories.sort((a, b) =>  a.title > b.title ? 0 : -1);
   periods = config.periods;
   showForm = false;
+  currency = appconfig.currency;
+
   private _from: Date = new Date()
   private _to: Date = new Date(new Date().getFullYear(), new Date().getMonth()+1);
   private JSON: any;
 
   get total(): number {
-    var ans = 0;
+    let ans = 0;
     this.list.forEach(element => {
       ans += element.value;
     });
