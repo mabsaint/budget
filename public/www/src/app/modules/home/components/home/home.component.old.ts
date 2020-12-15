@@ -318,7 +318,7 @@ export class HomeComponent implements OnInit {
 
   requestGrouped() {
     console.log('Load grouped info ...');
-    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(),  moment().add(this.offset, 'days').toDate()).subscribe(data => {
+    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().endOf('month').toDate()).subscribe(data => {
       console.log(data);
       const perc = [];
       let total = 0;
