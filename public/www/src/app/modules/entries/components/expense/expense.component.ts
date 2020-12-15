@@ -8,6 +8,7 @@ import { map, startWith } from 'rxjs/operators';
 import * as moment from 'moment';
 import {FilterPipe} from '../../../../core/pipes/filter.pipe';
 
+
 @Component({
   selector: 'app-expense',
   templateUrl: './expense.component.html',
@@ -229,6 +230,16 @@ export class ExpenseComponent implements OnInit {
     if (event.keyCode === 13 /* Enter button */ ) {
       this.editPrice(element);
     }
+  }
+
+  newDate(event, element) {
+  //  console.log("Date changed: " + id);
+  console.log(event);
+    console.log("Event ("+ element.date +"): " + moment(event.value).format('YYYY-MM-DD'));
+    element.date = moment(event.value);
+    this.entryService.updateDate(element).subscribe((item: any) => {
+      this.getEntries();
+    });
   }
 
 }

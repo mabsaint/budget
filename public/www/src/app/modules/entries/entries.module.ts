@@ -7,6 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
 import { PipeModule } from '../../core/pipes/pipes.modddue';
+import {CustomDateAdapter} from '../../customdateadapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 @NgModule({
   declarations: [ExpenseComponent, IncomeComponent, FilterDateComponent],
@@ -20,6 +22,8 @@ import { PipeModule } from '../../core/pipes/pipes.modddue';
     ReactiveFormsModule,
     PipeModule
   ],
-  exports: [ExpenseComponent, IncomeComponent]
+  exports: [ExpenseComponent, IncomeComponent],
+  providers: [{ provide: DateAdapter, useClass: CustomDateAdapter}]
+
 })
 export class EntriesModule { }

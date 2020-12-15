@@ -136,7 +136,7 @@
               <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
               <input matInput [matDatepicker]="x" style="display:none" (dateChange)="newDate($event, i)">
               <mat-datepicker-toggle matSuffix [for]="x"></mat-datepicker-toggle>
-              <mat-datepicker #x [touchUi]="true" ></mat-datepicker>
+              <mat-datepicker #x ></mat-datepicker>
               <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
           </div>
         </div>
