@@ -14,3 +14,5 @@ public/www/node_modules/.cache/terser-webpack-plugin/index-v5/80/70/409bbffb386f
 public/www/node_modules/.cache/*.*
 public/www/node_modules/.cache/terser-webpack-plugin/index-v5/80/70/409bbffb386f620379f56d94e622b913288b61524a2cd5bc8744bbc7f58a
 public/www/diff.txt
+public/swiss-www/budget
+.gitignore
