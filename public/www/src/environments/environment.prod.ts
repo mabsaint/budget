@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseURL: 'http://fambudget.space'
+  baseURL: 'http://fambudget.eu'
 };

@@ -33,7 +33,9 @@ import { LogoutComponent } from './login/logout/logout.component';
     FormsModule,
     MatToolbarModule, MatSidenavModule, MatListModule, MatButtonModule, MatIconModule
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

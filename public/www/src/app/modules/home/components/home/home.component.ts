@@ -281,7 +281,8 @@ export class HomeComponent implements OnInit {
           el.value += element.value < 0 ? element.value * (-1) : 0;
           el.total = this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)));
           //  el.datestr =  element.date.substr(0, 19);
-        } else {
+        }
+        else {
           this.events.push({
             start: moment(element.date).startOf('day').format('YYYY-MM-DD'),
             datestr: moment(element.date).startOf('day'),
@@ -338,6 +339,33 @@ export class HomeComponent implements OnInit {
 
   }
 
+  requestGrouped() {
+    console.log('Load grouped info ...');
+    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(),  moment().add(this.offset, 'days').toDate()).subscribe(data => {
+      console.log(data);
+      const perc = [];
+      let total = 0;
+
+      data.forEach(e => {
+        e.name = e.name ? e.name : 'Other';
+        total += e.y;
+      });
+
+      data.forEach(e => {
+        perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
+      });
+      console.log(perc);
+      this.expenses = data;
+      console.log(this.expenses);
+      this.options.series[0].data = perc;
+      this.cylOptions.series[0].data = data;
+      this.totalExpense = total;
+
+      Highcharts.chart('pie', this.options); // .setSize(300, 200);
+      Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
+    });
+
+  }
   changeOffset() {
     this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
       moment().add(this.offset, 'days').format('YYYY-MM-DD'))
@@ -345,31 +373,8 @@ export class HomeComponent implements OnInit {
         this.drawLines(data);
       });
 
-      // get grouped:
-      this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().add(this.offset, 'days').toDate())
-      .subscribe(data => {
-        console.log(data);
-        const perc = [];
-        let total = 0;
-
-        data.forEach(e => {
-          e.name = e.name ? e.name : 'Other';
-          total += e.y;
-        });
-
-        data.forEach(e => {
-          perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
-        });
-        console.log(perc);
-        this.expenses = data;
-        console.log(this.expenses);
-        this.options.series[0].data = perc;
-        this.cylOptions.series[0].data = data;
-        this.totalExpense = total;
-
-        Highcharts.chart('pie', this.options); // .setSize(300, 200);
-        Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
-      });
+      // get grouped
+      this.requestGrouped();
   }
 
 }
