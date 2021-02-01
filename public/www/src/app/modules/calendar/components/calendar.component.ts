@@ -28,6 +28,7 @@ import { Entry } from '../../entries/models/entry';
 import { EntryService } from '../../../services/entry.service';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import {BankAccount} from '../../account/account.model';
+import {appconfig} from './../../../configs/appconfig';
 
 import * as moment from 'moment';
 
@@ -66,6 +67,7 @@ export class CalendarComponent implements OnInit {
   accounts: BankAccount[];
   numberofsnapshots = 3;
   accountSubcription: any;
+  currency = appconfig.currency;
 
   get available(): number {
     let sum = 0;

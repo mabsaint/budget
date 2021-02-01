@@ -233,4 +233,14 @@ export class ExpenseComponent implements OnInit {
     }
   }
 
+  newDate(event, element) {
+      //  console.log("Date changed: " + id);
+      console.log(event);
+        console.log("Event ("+ element.date +"): " + moment(event.value).format('YYYY-MM-DD'));
+        element.date = moment(event.value);
+        this.entryService.updateDate(element).subscribe((item: any) => {
+          this.getEntries();
+        });
+      }
+
 }

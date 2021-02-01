@@ -134,6 +134,9 @@
           <div class="col-md-4 col-4 text-right " *ngIf="!i.paid || showPaid">
               <!-- <span (click)="editEntry(i)" class="btn"><i class="fa fa-edit"></i></span>&nbsp;&nbsp; -->
               <span (click)="payEntry(i._id)" class="btn"><i class="fa fa-money"></i></span>&nbsp;&nbsp;
+              <input matInput [matDatepicker]="x" style="display:none" (dateChange)="newDate($event, i)">
+              <mat-datepicker-toggle matSuffix [for]="x"></mat-datepicker-toggle>
+              <mat-datepicker #x [touchUi]="true" ></mat-datepicker>
               <span (click)="deleteEntry(i._id)" class="btn"><i class="fa fa-remove red"></i></span>
           </div>
         </div>

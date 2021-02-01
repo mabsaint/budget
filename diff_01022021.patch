@@ -1,0 +1,245 @@
+﻿diff --git a/public/www/src/app/app.module.ts b/public/www/src/app/app.module.ts
+index d4028581..12a28277 100644
+--- a/public/www/src/app/app.module.ts
++++ b/public/www/src/app/app.module.ts
+@@ -33,7 +33,9 @@ import { LogoutComponent } from './login/logout/logout.component';
+     FormsModule,
+     MatToolbarModule, MatSidenavModule, MatListModule, MatButtonModule, MatIconModule
+   ],
+-  providers: [],
++  providers: [
++
++  ],
+   bootstrap: [AppComponent]
+ })
+ export class AppModule { }
+diff --git a/public/www/src/app/configs/config.js b/public/www/src/app/configs/config.js
+new file mode 100644
+index 00000000..279bc2ae
+--- /dev/null
++++ b/public/www/src/app/configs/config.js
+@@ -0,0 +1,3 @@
++export var config = {
++    "categories" : [ '╨Ф╨╜╨╡╨▓╨╜╨╕','╨е╤А╨░╨╜╨░','╨Ы╨╡╨║╨░╤А╤Б╤В╨▓╨░','╨С╨╡╨╜╨╖╨╕╨╜']
++}
+\ No newline at end of file
+diff --git a/public/www/src/app/customdateadapter.ts b/public/www/src/app/customdateadapter.ts
+new file mode 100644
+index 00000000..b8e7a0bc
+--- /dev/null
++++ b/public/www/src/app/customdateadapter.ts
+@@ -0,0 +1,16 @@
++import {NativeDateAdapter} from '@angular/material';
++import {Injectable} from '@angular/core';
++import { Platform } from '@angular/cdk/platform';
++
++
++@Injectable()
++export class CustomDateAdapter extends NativeDateAdapter {
++
++  constructor() {
++    super('bg-BG', new Platform());
++  }
++
++  getFirstDayOfWeek(): number {
++    return 1;
++  }
++}
+diff --git a/public/www/src/app/modules/entries/components/expense/expense.config.ts b/public/www/src/app/modules/entries/components/expense/expense.config.ts
+index 7494384b..9a423f11 100644
+--- a/public/www/src/app/modules/entries/components/expense/expense.config.ts
++++ b/public/www/src/app/modules/entries/components/expense/expense.config.ts
+@@ -1,12 +1,12 @@
+ export var config = {
+-    "oldcategories" : [ {'╨Ц╨╕╨╗╨╕╤Й╨╡':[
++    "_categories" : [ {'╨Ц╨╕╨╗╨╕╤Й╨╡':[
+         "╨в╨╛╨║","╨Т╨╛╨┤╨░"
+     ]},
+        { '╨в╤А╨░╨╜╤Б╨┐╨╛╤А╤В':[]},
+         {'╨е╤А╨░╨╜╨░':[]},
+-        {'╨Ф╨╡╤Ж╨░':[]},
+-        {'╨Ы╨╕╤З╨╜╨╕':[]},
+-        {'╨а╨░╨╖╨▓╨╗╨╡╤З╨╡╨╜╨╕╤П':[]},
++        {'╨Ф╨╡╤Ж╨░':[]}, 
++        {'╨Ы╨╕╤З╨╜╨╕':[]}, 
++        {'╨а╨░╨╖╨▓╨╗╨╡╤З╨╡╨╜╨╕╤П':[]}, 
+         {'╨С╨░╨╜╨║╨╕':[]}],
+     "categories":[
+         {
+@@ -35,8 +35,8 @@ export var config = {
+     ],
+     "periods": [
+         {'key':'', 'value': '-- none --'},
+-        {'key':'daily','value':'╨╜╨░ ╨┤╨╡╨╜'},
+-        {'key':'weekly','value':'╨╜╨░ ╤Б╨╡╨┤╨╝╨╕╤Ж╨░'},
++        {'key':'daily','value':'╨╜╨░ ╨┤╨╡╨╜'}, 
++        {'key':'weekly','value':'╨╜╨░ ╤Б╨╡╨┤╨╝╨╕╤Ж╨░'}, 
+         {'key':'monthly','value':'╨╜╨░ ╨╝╨╡╤Б╨╡╤Ж'}
+     ]
+-}
++}
+\ No newline at end of file
+diff --git a/public/www/src/app/modules/entries/entries.module.ts b/public/www/src/app/modules/entries/entries.module.ts
+index a1b9e3f8..b59881df 100644
+--- a/public/www/src/app/modules/entries/entries.module.ts
++++ b/public/www/src/app/modules/entries/entries.module.ts
+@@ -7,6 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+ import {MatDatepickerModule} from '@angular/material/datepicker';
+ import { MatNativeDateModule, MatFormFieldModule, MatAutocompleteModule } from '@angular/material';
+ import { PipeModule } from '../../core/pipes/pipes.modddue';
++import {CustomDateAdapter} from '../../customdateadapter';
++import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+ 
+ @NgModule({
+   declarations: [ExpenseComponent, IncomeComponent, FilterDateComponent],
+@@ -20,6 +22,8 @@ import { PipeModule } from '../../core/pipes/pipes.modddue';
+     ReactiveFormsModule,
+     PipeModule
+   ],
+-  exports: [ExpenseComponent, IncomeComponent]
++  exports: [ExpenseComponent, IncomeComponent],
++  providers: [{ provide: DateAdapter, useClass: CustomDateAdapter}]
++
+ })
+ export class EntriesModule { }
+diff --git a/public/www/src/app/modules/home/components/home/home.component.ts b/public/www/src/app/modules/home/components/home/home.component.ts
+index b3f080f0..b139a563 100644
+--- a/public/www/src/app/modules/home/components/home/home.component.ts
++++ b/public/www/src/app/modules/home/components/home/home.component.ts
+@@ -229,30 +229,7 @@ export class HomeComponent implements OnInit {
+     this.lineOptions.subtitle.text = '╨┤╨╛ ' + moment().add(this.offset, 'days').endOf('day').fromNow();
+ 
+     this.loadAccounts();
+-    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().endOf('month').toDate()).subscribe(data => {
+-      console.log(data);
+-      const perc = [];
+-      let total = 0;
+-
+-      data.forEach(e => {
+-        e.name = e.name ? e.name : 'Other';
+-        total += e.y;
+-      });
+-
+-      data.forEach(e => {
+-        perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
+-      });
+-      console.log(perc);
+-      this.expenses = data;
+-      console.log(this.expenses);
+-      this.options.series[0].data = perc;
+-      this.cylOptions.series[0].data = data;
+-      this.totalExpense = total;
+-
+-      Highcharts.chart('pie', this.options); // .setSize(300, 200);
+-      Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
+-    });
+-
++   this.requestGrouped();
+     // get all:
+     this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
+       moment().add(this.offset, 'days').format('YYYY-MM-DD'))
+@@ -281,7 +258,8 @@ export class HomeComponent implements OnInit {
+           el.value += element.value < 0 ? element.value * (-1) : 0;
+           el.total = this.getTotalTillCurrent(element, JSON.parse(JSON.stringify(data)));
+           //  el.datestr =  element.date.substr(0, 19);
+-        } else {
++        }
++        else {
+           this.events.push({
+             start: moment(element.date).startOf('day').format('YYYY-MM-DD'),
+             datestr: moment(element.date).startOf('day'),
+@@ -338,6 +316,33 @@ export class HomeComponent implements OnInit {
+ 
+   }
+ 
++  requestGrouped() {
++    console.log('Load grouped info ...');
++    this.entryService.getGroupedExpenses(moment().startOf('month').toDate(),  moment().add(this.offset, 'days').toDate()).subscribe(data => {
++      console.log(data);
++      const perc = [];
++      let total = 0;
++
++      data.forEach(e => {
++        e.name = e.name ? e.name : 'Other';
++        total += e.y;
++      });
++
++      data.forEach(e => {
++        perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
++      });
++      console.log(perc);
++      this.expenses = data;
++      console.log(this.expenses);
++      this.options.series[0].data = perc;
++      this.cylOptions.series[0].data = data;
++      this.totalExpense = total;
++
++      Highcharts.chart('pie', this.options); // .setSize(300, 200);
++      Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
++    });
++
++  }
+   changeOffset() {
+     this.entryService.getAllFromDateEntries(moment().startOf('day').format('YYYY-MM-DD'),
+       moment().add(this.offset, 'days').format('YYYY-MM-DD'))
+@@ -345,31 +350,8 @@ export class HomeComponent implements OnInit {
+         this.drawLines(data);
+       });
+ 
+-      // get grouped:
+-      this.entryService.getGroupedExpenses(moment().startOf('month').toDate(), moment().add(this.offset, 'days').toDate())
+-      .subscribe(data => {
+-        console.log(data);
+-        const perc = [];
+-        let total = 0;
+-
+-        data.forEach(e => {
+-          e.name = e.name ? e.name : 'Other';
+-          total += e.y;
+-        });
+-
+-        data.forEach(e => {
+-          perc.push({ name: e.name ? e.name : 'Other', y: parseFloat(((e.y / total) * 100).toFixed(2)) });
+-        });
+-        console.log(perc);
+-        this.expenses = data;
+-        console.log(this.expenses);
+-        this.options.series[0].data = perc;
+-        this.cylOptions.series[0].data = data;
+-        this.totalExpense = total;
+-
+-        Highcharts.chart('pie', this.options); // .setSize(300, 200);
+-        Highcharts.chart('cylinder', this.cylOptions); // .setSize(300, 200);
+-      });
++      // get grouped
++      this.requestGrouped();
+   }
+ 
+ }
+diff --git a/public/www/src/environments/environment.ts b/public/www/src/environments/environment.ts
+index a7e3308e..ad832b58 100644
+--- a/public/www/src/environments/environment.ts
++++ b/public/www/src/environments/environment.ts
+@@ -4,7 +4,7 @@
+ 
+ export const environment = {
+   production: false,
+-  baseURL: 'http://swiss.fambudget.space'
++  baseURL: 'http://swiss.fambudget.eu'
+ };
+ 
+ /*
+diff --git a/public/www/src/tsconfig.app.json b/public/www/src/tsconfig.app.json
+index 190fd300..9fb52b8e 100644
+--- a/public/www/src/tsconfig.app.json
++++ b/public/www/src/tsconfig.app.json
+@@ -6,6 +6,8 @@
+   },
+   "exclude": [
+     "test.ts",
+-    "**/*.spec.ts"
++    "**/*.spec.ts",
++    "**/*.old.ts"
++
+   ]
+ }

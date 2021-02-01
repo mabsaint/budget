@@ -112,4 +112,8 @@ export class EntryService {
     return this.http.put<any>(this.url + 'updateentry/', id);
   }
 
+  updateDate(id: any): Observable<any> {
+    return this.http.put<any>(this.url + 'updateentrydate/', id);
+  }
+
 }
